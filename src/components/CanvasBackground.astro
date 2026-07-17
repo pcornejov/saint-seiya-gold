@@ -1,0 +1,257 @@
+---
+// CanvasBackground.astro
+---
+
+<canvas id="space-canvas"></canvas>
+<div class="cosmic-nebula"></div>
+
+<style>
+  #space-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 1;
+    pointer-events: none; /* Let clicks pass through to content */
+    background: radial-gradient(circle at center, #0a081a 0%, #020208 100%);
+  }
+
+  .cosmic-nebula {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    pointer-events: none;
+    background-image: 
+      radial-gradient(circle at 20% 30%, rgba(27, 10, 42, 0.4) 0%, transparent 40%),
+      radial-gradient(circle at 80% 70%, rgba(11, 19, 43, 0.45) 0%, transparent 45%),
+      radial-gradient(circle at 50% 50%, rgba(184, 134, 11, 0.04) 0%, transparent 60%);
+    opacity: 0.8;
+    mix-blend-mode: screen;
+  }
+</style>
+
+<script>
+  // Dynamic Space Background Engine (Canvas)
+  const canvas = document.getElementById('space-canvas') as HTMLCanvasElement;
+  if (canvas) {
+    const ctx = canvas.getContext('2d');
+    if (ctx) {
+      let animationId;
+      let width = (canvas.width = window.innerWidth);
+      let height = (canvas.height = window.innerHeight);
+
+      const STAR_COUNT = 150;
+      const SPEED = 0.5;
+      const CONNECT_DISTANCE = 110;
+      
+      const stars: Star[] = [];
+      const mouse = { x: null, y: null, radius: 150 };
+
+      class Star {
+        x: number;
+        y: number;
+        z: number;
+        size: number;
+        vx: number;
+        vy: number;
+        color: string;
+        pulseSpeed: number;
+        opacity: number;
+        increasing: boolean;
+
+        constructor() {
+          this.reset(true);
+        }
+
+        reset(init = false) {
+          this.x = Math.random() * width;
+          this.y = Math.random() * height;
+          this.z = init ? Math.random() * width : width;
+          this.size = Math.random() * 1.5 + 0.5;
+          this.vx = (Math.random() - 0.5) * SPEED;
+          this.vy = (Math.random() - 0.5) * SPEED;
+          
+          const rand = Math.random();
+          if (rand > 0.9) {
+            this.color = 'rgba(255, 215, 0, ' + (Math.random() * 0.7 + 0.3) + ')';
+          } else if (rand > 0.8) {
+            this.color = 'rgba(100, 149, 237, ' + (Math.random() * 0.7 + 0.3) + ')';
+          } else {
+            this.color = 'rgba(255, 255, 255, ' + (Math.random() * 0.8 + 0.2) + ')';
+          }
+          
+          this.pulseSpeed = Math.random() * 0.03 + 0.01;
+          this.opacity = Math.random();
+          this.increasing = Math.random() > 0.5;
+        }
+
+        update() {
+          this.x += this.vx;
+          this.y += this.vy;
+          
+          if (this.increasing) {
+            this.opacity += this.pulseSpeed;
+            if (this.opacity >= 1) this.increasing = false;
+          } else {
+            this.opacity -= this.pulseSpeed;
+            if (this.opacity <= 0.2) this.increasing = true;
+          }
+
+          if (this.x < 0 || this.x > width || this.y < 0 || this.y > height) {
+            this.reset(false);
+          }
+        }
+
+        draw() {
+          if (!ctx) return;
+          ctx.beginPath();
+          ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+          ctx.fillStyle = this.color.replace(/[\d\.]+\)$/, `${this.opacity})`);
+          ctx.shadowBlur = this.size * 2;
+          ctx.shadowColor = this.color;
+          ctx.fill();
+          ctx.shadowBlur = 0;
+        }
+      }
+
+      class ShootingStar {
+        x: number;
+        y: number;
+        length: number;
+        speed: number;
+        dx: number;
+        dy: number;
+        active: boolean;
+        delay: number;
+
+        constructor() {
+          this.reset();
+        }
+
+        reset() {
+          this.x = Math.random() * width;
+          this.y = Math.random() * (height * 0.5);
+          this.length = Math.random() * 80 + 50;
+          this.speed = Math.random() * 15 + 10;
+          this.dx = -(Math.random() * 4 + 2);
+          this.dy = Math.random() * 2 + 1;
+          this.active = false;
+          this.delay = Math.random() * 600;
+        }
+
+        update() {
+          if (!this.active) {
+            this.delay--;
+            if (this.delay <= 0) {
+              this.active = true;
+            }
+            return;
+          }
+
+          this.x += this.dx * this.speed;
+          this.y += this.dy * this.speed;
+
+          if (this.x < -100 || this.y > height + 100) {
+            this.reset();
+          }
+        }
+
+        draw() {
+          if (!this.active || !ctx) return;
+          
+          const grad = ctx.createLinearGradient(this.x, this.y, this.x - this.dx * this.length, this.y - this.dy * this.length);
+          grad.addColorStop(0, 'rgba(255, 223, 115, 0.9)');
+          grad.addColorStop(0.3, 'rgba(255, 215, 0, 0.4)');
+          grad.addColorStop(1, 'rgba(255, 255, 255, 0)');
+          
+          ctx.beginPath();
+          ctx.strokeStyle = grad;
+          ctx.lineWidth = 1.5;
+          ctx.moveTo(this.x, this.y);
+          ctx.lineTo(this.x - this.dx * this.length, this.y - this.dy * this.length);
+          ctx.stroke();
+        }
+      }
+
+      for (let i = 0; i < STAR_COUNT; i++) {
+        stars.push(new Star());
+      }
+
+      const shootingStars = [new ShootingStar(), new ShootingStar()];
+
+      window.addEventListener('mousemove', (e) => {
+        mouse.x = e.clientX;
+        mouse.y = e.clientY;
+      });
+
+      window.addEventListener('mouseleave', () => {
+        mouse.x = null;
+        mouse.y = null;
+      });
+
+      window.addEventListener('resize', () => {
+        width = canvas.width = window.innerWidth;
+        height = canvas.height = window.innerHeight;
+        stars.length = 0;
+        for (let i = 0; i < STAR_COUNT; i++) {
+          stars.push(new Star());
+        }
+      });
+
+      function animate() {
+        if (!ctx) return;
+        ctx.clearRect(0, 0, width, height);
+
+        for (let i = 0; i < stars.length; i++) {
+          stars[i].update();
+          stars[i].draw();
+
+          for (let j = i + 1; j < stars.length; j++) {
+            const dx = stars[i].x - stars[j].x;
+            const dy = stars[i].y - stars[j].y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+
+            if (dist < CONNECT_DISTANCE) {
+              const alpha = (1 - dist / CONNECT_DISTANCE) * 0.13;
+              ctx.beginPath();
+              ctx.strokeStyle = `rgba(255, 215, 0, ${alpha})`;
+              ctx.lineWidth = 0.5;
+              ctx.moveTo(stars[i].x, stars[i].y);
+              ctx.lineTo(stars[j].x, stars[j].y);
+              ctx.stroke();
+            }
+          }
+
+          if (mouse.x !== null) {
+            const dx = stars[i].x - mouse.x;
+            const dy = stars[i].y - mouse.y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            
+            if (dist < mouse.radius) {
+              const alpha = (1 - dist / mouse.radius) * 0.25;
+              ctx.beginPath();
+              ctx.strokeStyle = `rgba(255, 223, 115, ${alpha})`;
+              ctx.lineWidth = 0.7;
+              ctx.moveTo(stars[i].x, stars[i].y);
+              ctx.lineTo(mouse.x, mouse.y);
+              ctx.stroke();
+            }
+          }
+        }
+
+        shootingStars.forEach(sStar => {
+          sStar.update();
+          sStar.draw();
+        });
+
+        animationId = requestAnimationFrame(animate);
+      }
+
+      animate();
+    }
+  }
+</script>

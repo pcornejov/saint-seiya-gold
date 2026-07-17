@@ -1,0 +1,654 @@
+---
+// SaintsCodex.astro
+import { goldSaints } from '../data/saintsData.js';
+---
+
+<section id="codex-section">
+  <div class="container">
+    <h2 class="section-title gold-text-gradient">El Códice Dorado</h2>
+    <p class="section-subtitle-text">Selecciona un signo zodiacal para revelar el cosmos, atributos e historia de su legendario Caballero de Oro.</p>
+    
+    <div class="codex-container">
+      <!-- Grid of 12 signs, generated statically by Astro! -->
+      <div class="signs-grid" id="signs-selector-grid">
+        {goldSaints.map((saint) => (
+          <div class="sign-card" data-id={saint.id}>
+            <span class="sign-card-symbol">{saint.symbol}</span>
+            <span class="sign-card-name">{saint.sign}</span>
+          </div>
+        ))}
+      </div>
+
+      <!-- Detailed Saint Panel (Dashboard) -->
+      <div class="saint-details-view glass-panel" id="saint-details-card">
+        <div class="details-placeholder" id="details-empty-state">
+          <div class="placeholder-icon">⚜️</div>
+          <h3>Elige un Signo del Zodiaco</h3>
+          <p>Eleva tu cosmos para invocar el expediente secreto del Caballero guardián.</p>
+        </div>
+
+        <div class="details-content hide" id="details-real-content">
+          <div class="saint-main-info">
+            <div class="saint-portrait-container">
+              <img id="saint-portrait" src="" alt="Caballero" />
+              <div class="portrait-glow"></div>
+            </div>
+            <div class="saint-identity">
+              <span class="zodiac-sign-badge" id="saint-sign-badge"></span>
+              <h3 id="saint-name" class="gold-text-gradient"></h3>
+              <p class="saint-temple-name" id="saint-temple-name"></p>
+              
+              <div class="saint-bio-grid">
+                <div class="bio-item"><strong>Edad:</strong> <span id="bio-age"></span></div>
+                <div class="bio-item"><strong>Altura:</strong> <span id="bio-height"></span></div>
+                <div class="bio-item"><strong>Peso:</strong> <span id="bio-weight"></span></div>
+                <div class="bio-item"><strong>Sangre:</strong> <span id="bio-blood"></span></div>
+                <div class="bio-item"><strong>Origen:</strong> <span id="bio-origin"></span></div>
+                <div class="bio-item"><strong>Entrenamiento:</strong> <span id="bio-training"></span></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="saint-details-tabs">
+            <div class="tabs-header">
+              <button class="tab-btn active" data-tab="lore" id="tab-btn-lore">Historia</button>
+              <button class="tab-btn" data-tab="stats" id="tab-btn-stats">Atributos</button>
+              <button class="tab-btn" data-tab="attacks" id="tab-btn-attacks">Técnicas</button>
+            </div>
+            <div class="tabs-content">
+              <div class="tab-pane active" id="pane-lore">
+                <p id="saint-description">Cargando descripción...</p>
+              </div>
+              <div class="tab-pane" id="pane-stats">
+                <div class="stats-bars-container" id="stats-bars">
+                  <!-- Stat bars rendered dynamically -->
+                </div>
+              </div>
+              <div class="tab-pane" id="pane-attacks">
+                <div class="techniques-list" id="techniques-list">
+                  <!-- Techniques list rendered dynamically -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .section-subtitle-text {
+    text-align: center;
+    max-width: 600px;
+    margin: -2.5rem auto 3rem auto;
+    color: var(--text-secondary);
+    font-size: 1.05rem;
+  }
+
+  .codex-container {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+    gap: 3rem;
+    margin-top: 2rem;
+    align-items: start;
+  }
+
+  /* Selector Grid for 12 Signs */
+  .signs-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+  }
+
+  .sign-card {
+    aspect-ratio: 1;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    padding: 1rem;
+    color: var(--text-secondary);
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .sign-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--gold-primary);
+    color: var(--gold-light);
+    box-shadow: 0 5px 15px rgba(255, 215, 0, 0.15);
+  }
+
+  .sign-card.active {
+    background: linear-gradient(135deg, rgba(139, 101, 8, 0.25) 0%, rgba(255, 215, 0, 0.1) 100%);
+    border-color: var(--gold-primary);
+    color: var(--gold-primary);
+    box-shadow: var(--gold-glow);
+  }
+
+  .sign-card-symbol {
+    font-size: 1.8rem;
+    line-height: 1;
+    filter: drop-shadow(0 0 5px rgba(255, 215, 0, 0.1));
+    transition: transform 0.3s ease;
+  }
+
+  .sign-card:hover .sign-card-symbol {
+    transform: scale(1.1);
+  }
+
+  .sign-card.active .sign-card-symbol {
+    transform: scale(1.15);
+    filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.5));
+  }
+
+  .sign-card-name {
+    font-family: var(--font-serif);
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  /* Detailed Saint View Panel */
+  .saint-details-view {
+    min-height: 520px;
+    padding: 2.5rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .details-placeholder {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 440px;
+    text-align: center;
+    color: var(--text-secondary);
+  }
+
+  .placeholder-icon {
+    font-size: 4rem;
+    margin-bottom: 1.5rem;
+    animation: float 4s ease-in-out infinite;
+  }
+
+  .details-placeholder h3 {
+    font-family: var(--font-serif);
+    font-size: 1.5rem;
+    color: var(--gold-light);
+    margin-bottom: 0.5rem;
+    letter-spacing: 2px;
+  }
+
+  .details-content {
+    animation: fadeIn 0.5s ease-out forwards;
+  }
+
+  .saint-main-info {
+    display: flex;
+    gap: 2.5rem;
+    margin-bottom: 2.5rem;
+    align-items: center;
+  }
+
+  .saint-portrait-container {
+    width: 170px;
+    height: 220px;
+    border-radius: 8px;
+    border: 2px solid var(--gold-secondary);
+    overflow: hidden;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+    position: relative;
+    background: var(--bg-space-fallback);
+    flex-shrink: 0;
+  }
+
+  .saint-portrait-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top center;
+    transition: transform 0.5s ease;
+  }
+
+  .saint-portrait-container:hover img {
+    transform: scale(1.08);
+  }
+
+  .portrait-glow {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    box-shadow: inset 0 0 20px rgba(255, 215, 0, 0.3);
+    pointer-events: none;
+    transition: all 0.3s ease;
+  }
+
+  .saint-portrait-container:hover .portrait-glow {
+    box-shadow: inset 0 0 30px rgba(255, 215, 0, 0.6);
+  }
+
+  .saint-identity {
+    flex-grow: 1;
+  }
+
+  .zodiac-sign-badge {
+    background: var(--gold-dark);
+    color: #fff;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    font-weight: 700;
+    letter-spacing: 2px;
+    padding: 0.25rem 0.75rem;
+    border-radius: 30px;
+    border: 1px solid var(--gold-light);
+    display: inline-block;
+    margin-bottom: 0.5rem;
+    box-shadow: 0 2px 8px rgba(255,215,0,0.2);
+  }
+
+  .saint-identity h3 {
+    font-size: 2.2rem;
+    margin-bottom: 0.2rem;
+    letter-spacing: 2px;
+  }
+
+  .saint-temple-name {
+    font-family: var(--font-serif);
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    margin-bottom: 1.5rem;
+    letter-spacing: 1px;
+  }
+
+  .saint-bio-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.6rem;
+    font-size: 0.9rem;
+  }
+
+  .bio-item {
+    color: var(--text-secondary);
+  }
+
+  .bio-item strong {
+    color: var(--gold-light);
+    font-family: var(--font-serif);
+    font-weight: 600;
+    margin-right: 4px;
+  }
+
+  /* Tabs Section */
+  .saint-details-tabs {
+    margin-top: 1.5rem;
+  }
+
+  .tabs-header {
+    display: flex;
+    border-bottom: 1px solid rgba(255, 215, 0, 0.15);
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .tab-btn {
+    color: var(--text-secondary);
+    font-family: var(--font-serif);
+    font-size: 1rem;
+    padding: 0.75rem 0;
+    letter-spacing: 1px;
+    font-weight: 600;
+    position: relative;
+    transition: all 0.3s ease;
+  }
+
+  .tab-btn::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: var(--gold-primary);
+    box-shadow: var(--gold-glow);
+    transition: all 0.3s ease;
+  }
+
+  .tab-btn:hover {
+    color: var(--gold-light);
+  }
+
+  .tab-btn.active {
+    color: var(--gold-primary);
+  }
+
+  .tab-btn.active::after {
+    width: 100%;
+  }
+
+  .tab-pane {
+    display: none;
+    animation: fadeIn 0.4s ease-out forwards;
+  }
+
+  .tab-pane.active {
+    display: block;
+  }
+
+  /* Custom tabs text styling needs :global in Astro if rendered dynamically, or write directly */
+  :global(#pane-lore p) {
+    color: var(--text-secondary);
+    font-size: 0.98rem;
+    line-height: 1.7;
+  }
+
+  /* Stats Styling */
+  :global(.stats-bars-container) {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  :global(.stat-row) {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+  }
+
+  :global(.stat-label) {
+    width: 120px;
+    font-family: var(--font-serif);
+    color: var(--gold-light);
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  :global(.stat-bar-outer) {
+    flex-grow: 1;
+    height: 12px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 215, 0, 0.1);
+    border-radius: 6px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  :global(.stat-bar-inner) {
+    height: 100%;
+    background: var(--gold-cosmic);
+    border-radius: 6px;
+    width: 0;
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+    transition: width 1s cubic-bezier(0.25, 0.8, 0.25, 1);
+  }
+
+  :global(.stat-value) {
+    width: 40px;
+    text-align: right;
+    font-family: var(--font-sans);
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--text-primary);
+  }
+
+  /* Techniques Styling */
+  :global(.techniques-list) {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+  }
+
+  :global(.tech-item) {
+    border-left: 3px solid var(--gold-primary);
+    padding-left: 1.2rem;
+    padding-bottom: 0.3rem;
+    transition: all 0.3s ease;
+  }
+
+  :global(.tech-item:hover) {
+    border-left-width: 5px;
+    transform: translateX(3px);
+  }
+
+  :global(.tech-name) {
+    font-family: var(--font-serif);
+    font-size: 1.05rem;
+    color: var(--gold-primary);
+    margin-bottom: 0.25rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+  }
+
+  :global(.tech-desc) {
+    color: var(--text-secondary);
+    font-size: 0.88rem;
+    line-height: 1.5;
+  }
+
+  @media (max-width: 1024px) {
+    .codex-container {
+      grid-template-columns: 1fr;
+    }
+    
+    .signs-grid {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+
+  @media (max-width: 640px) {
+    .signs-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+    
+    .saint-main-info {
+      flex-direction: column;
+      text-align: center;
+      gap: 1.5rem;
+    }
+    
+    :global(.saint-bio-grid) {
+      grid-template-columns: 1fr;
+    }
+    
+    .saint-details-view {
+      padding: 1.5rem;
+    }
+    
+    .tabs-header {
+      gap: 0.8rem;
+    }
+    
+    .tab-btn {
+      font-size: 0.85rem;
+    }
+    
+    :global(.stat-row) {
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    
+    :global(.stat-label) {
+      width: 100%;
+    }
+    
+    :global(.stat-bar-outer) {
+      width: 80%;
+    }
+  }
+</style>
+
+<script>
+  import { goldSaints } from '../data/saintsData.js';
+
+  const spanishAttrNames = {
+    cosmos: 'Cosmos',
+    fuerza: 'Fuerza',
+    velocidad: 'Velocidad',
+    sabiduria: 'Sabiduría',
+    defensa: 'Defensa'
+  };
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const detailsEmpty = document.getElementById('details-empty-state');
+    const detailsContent = document.getElementById('details-real-content');
+    
+    const portrait = document.getElementById('saint-portrait') as HTMLImageElement;
+    const name = document.getElementById('saint-name');
+    const badge = document.getElementById('saint-sign-badge');
+    const temple = document.getElementById('saint-temple-name');
+    
+    const bioAge = document.getElementById('bio-age');
+    const bioHeight = document.getElementById('bio-height');
+    const bioWeight = document.getElementById('bio-weight');
+    const bioBlood = document.getElementById('bio-blood');
+    const bioOrigin = document.getElementById('bio-origin');
+    const bioTraining = document.getElementById('bio-training');
+    
+    const desc = document.getElementById('saint-description');
+    const statsBars = document.getElementById('stats-bars');
+    const techList = document.getElementById('techniques-list');
+    
+    const tabButtons = document.querySelectorAll('.tab-btn');
+    const tabPanes = document.querySelectorAll('.tab-pane');
+    const signCards = document.querySelectorAll('.sign-card');
+    
+    let currentSaint: any = null;
+
+    // Set click handler for cards
+    signCards.forEach(card => {
+      card.addEventListener('click', () => {
+        const id = card.getAttribute('data-id');
+        selectSaint(id);
+      });
+    });
+
+    // Set tab handlers
+    tabButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        const activeTab = button.getAttribute('data-tab');
+        
+        tabButtons.forEach(btn => btn.classList.remove('active'));
+        tabPanes.forEach(pane => pane.classList.remove('active'));
+        
+        button.classList.add('active');
+        document.getElementById(`pane-${activeTab}`)?.classList.add('active');
+        
+        if (activeTab === 'stats' && currentSaint) {
+          animateStatsBars();
+        }
+      });
+    });
+
+    function selectSaint(id: string | null) {
+      if (!id) return;
+      
+      signCards.forEach(card => {
+        if (card.getAttribute('data-id') === id) {
+          card.classList.add('active');
+        } else {
+          card.classList.remove('active');
+        }
+      });
+
+      const saint = goldSaints.find(s => s.id === id);
+      if (!saint) return;
+      currentSaint = saint;
+
+      if (detailsEmpty && detailsContent) {
+        detailsEmpty.classList.add('hide');
+        detailsContent.classList.remove('hide');
+      }
+
+      if (portrait) {
+        portrait.src = saint.image;
+        portrait.alt = saint.name;
+      }
+      if (name) name.textContent = saint.name;
+      if (badge) badge.textContent = saint.sign;
+      if (temple) temple.textContent = saint.temple;
+      
+      if (bioAge) bioAge.textContent = String(saint.age);
+      if (bioHeight) bioHeight.textContent = saint.height;
+      if (bioWeight) bioWeight.textContent = saint.weight;
+      if (bioBlood) bioBlood.textContent = saint.bloodType;
+      if (bioOrigin) bioOrigin.textContent = saint.nationality;
+      if (bioTraining) bioTraining.textContent = saint.trainingPlace;
+      
+      if (desc) desc.textContent = saint.description;
+
+      // Stats bars
+      if (statsBars) {
+        statsBars.innerHTML = '';
+        Object.keys(saint.stats).forEach(key => {
+          const val = saint.stats[key];
+          const name = spanishAttrNames[key] || key;
+          const row = document.createElement('div');
+          row.className = 'stat-row';
+          row.innerHTML = `
+            <span class="stat-label">${name}</span>
+            <div class="stat-bar-outer">
+              <div class="stat-bar-inner" data-value="${val}" style="width: 0%"></div>
+            </div>
+            <span class="stat-value">${val}%</span>
+          `;
+          statsBars.appendChild(row);
+        });
+      }
+
+      // Techniques
+      if (techList) {
+        techList.innerHTML = '';
+        saint.techniques.forEach(tech => {
+          const item = document.createElement('div');
+          item.className = 'tech-item';
+          item.innerHTML = `
+            <div class="tech-name">${tech.name}</div>
+            <div class="tech-desc">${tech.desc}</div>
+          `;
+          techList.appendChild(item);
+        });
+      }
+
+      // Reset to lore tab
+      const activeTabBtn = document.querySelector('.tab-btn.active');
+      if (activeTabBtn && activeTabBtn.getAttribute('data-tab') === 'stats') {
+        animateStatsBars();
+      } else {
+        tabButtons.forEach(btn => btn.classList.remove('active'));
+        tabPanes.forEach(pane => pane.classList.remove('active'));
+        document.getElementById('tab-btn-lore')?.classList.add('active');
+        document.getElementById('pane-lore')?.classList.add('active');
+      }
+    }
+
+    function animateStatsBars() {
+      setTimeout(() => {
+        const bars = document.querySelectorAll('.stat-bar-inner');
+        bars.forEach(bar => {
+          const val = bar.getAttribute('data-value');
+          if (bar instanceof HTMLElement && val) {
+            bar.style.width = `${val}%`;
+          }
+        });
+      }, 50);
+    }
+
+    // Expose selectSaint globally so other components (like Sanctuary) can call it
+    (window as any).selectSaintInCodex = (id: string) => {
+      selectSaint(id);
+    };
+  });
+</script>

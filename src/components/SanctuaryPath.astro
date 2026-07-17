@@ -1,0 +1,435 @@
+---
+// SanctuaryPath.astro
+import { goldSaints } from '../data/saintsData.js';
+
+const romanNumerals = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII'];
+
+// Spaced coordinates climbing the mountain (X%, Y% relative to container)
+const templeCoordinates = [
+  { x: 12, y: 84 },  // I. Aries
+  { x: 23, y: 78 },  // II. Tauro
+  { x: 34, y: 71 },  // III. Géminis
+  { x: 44, y: 64 },  // IV. Cáncer
+  { x: 55, y: 58 },  // V. Leo
+  { x: 67, y: 52 },  // VI. Virgo
+  { x: 78, y: 46 },  // VII. Libra
+  { x: 86, y: 38 },  // VIII. Escorpio
+  { x: 77, y: 28 },  // IX. Sagitario
+  { x: 64, y: 22 },  // X. Capricornio
+  { x: 50, y: 17 },  // XI. Acuario
+  { x: 36, y: 11 }   // XII. Piscis
+];
+---
+
+<section id="sanctuary-section">
+  <div class="container">
+    <h2 class="section-title gold-text-gradient">La Senda de las 12 Casas</h2>
+    <p class="section-subtitle-text">Recorre el sendero empinado del Santuario de Atena. Haz clic en cada templo para explorar su custodiado misterio.</p>
+    
+    <div class="sanctuary-path-wrapper">
+      <!-- Mountain outline path -->
+      <div class="mountain-path" id="mountain-interactive-path">
+        <!-- SVG path representing the mountain climb -->
+        <svg viewBox="0 0 800 600" class="path-svg">
+          <path d="M 100 500 Q 200 450 300 400 T 500 300 T 700 200 T 500 100" fill="none" stroke="rgba(255, 215, 0, 0.15)" stroke-width="6" stroke-dasharray="10 5" />
+        </svg>
+        
+        <!-- 12 Temple Nodes, generated statically by Astro! -->
+        <div class="temples-nodes-container" id="temple-nodes-container">
+          {goldSaints.map((saint, index) => {
+            const coord = templeCoordinates[index] || { x: 50, y: 50 };
+            return (
+              <div class="temple-node" style={`left: ${coord.x}%; top: ${coord.y}%;`} data-id={saint.id} data-index={index}>
+                {romanNumerals[index]}
+                <span class="temple-node-label">{saint.sign}</span>
+              </div>
+            )
+          })}
+        </div>
+      </div>
+
+      <!-- Detail drawer for the current temple -->
+      <div class="temple-info-drawer glass-panel hide" id="temple-drawer">
+        <button class="close-drawer-btn" id="close-drawer" aria-label="Cerrar">×</button>
+        <div class="drawer-inner">
+          <div class="drawer-header">
+            <span class="temple-number" id="drawer-temple-number"></span>
+            <h3 id="drawer-temple-name" class="gold-text-gradient"></h3>
+          </div>
+          <div class="drawer-body">
+            <div class="drawer-visual">
+              <div class="temple-pillar-svg">🏛️</div>
+              <div class="guardian-brief">
+                <img id="drawer-guardian-img" src="" alt="Guardian" />
+                <p>Guardián: <strong id="drawer-guardian-name"></strong></p>
+              </div>
+            </div>
+            <p class="temple-lore" id="drawer-temple-lore"></p>
+            <!-- inspect button container -->
+            <div id="drawer-inspect-container"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .section-subtitle-text {
+    text-align: center;
+    max-width: 600px;
+    margin: -2.5rem auto 3rem auto;
+    color: var(--text-secondary);
+    font-size: 1.05rem;
+  }
+
+  .sanctuary-path-wrapper {
+    display: flex;
+    position: relative;
+    width: 100%;
+    min-height: 620px;
+    gap: 2rem;
+    margin-top: 2rem;
+  }
+
+  /* Mountain path SVG container */
+  .mountain-path {
+    flex: 1;
+    position: relative;
+    height: 600px;
+    background: radial-gradient(circle at center, rgba(10, 10, 25, 0.4) 0%, rgba(2, 2, 8, 0) 100%);
+    border: 1px solid rgba(255, 215, 0, 0.05);
+    border-radius: 16px;
+    overflow: hidden;
+  }
+
+  .path-svg {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+  }
+
+  /* Nodes representing the temples */
+  .temples-nodes-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+  }
+
+  .temple-node {
+    position: absolute;
+    width: 48px;
+    height: 48px;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    background: var(--glass-bg);
+    border: 2px solid var(--gold-secondary);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--text-primary);
+    font-family: var(--font-serif);
+    font-size: 0.95rem;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  }
+
+  .temple-node::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    border: 1px solid var(--gold-primary);
+    opacity: 0;
+    transition: all 0.3s ease;
+  }
+
+  .temple-node:hover {
+    border-color: var(--gold-primary);
+    color: var(--gold-primary);
+    box-shadow: var(--gold-glow);
+    transform: translate(-50%, -50%) scale(1.15);
+  }
+
+  .temple-node:hover::before {
+    animation: pulseNode 1.5s infinite;
+    opacity: 1;
+  }
+
+  .temple-node.active {
+    background: var(--gold-primary);
+    border-color: var(--gold-light);
+    color: #020208;
+    box-shadow: var(--gold-glow-strong);
+    transform: translate(-50%, -50%) scale(1.2);
+  }
+
+  .temple-node-label {
+    position: absolute;
+    top: 55px;
+    left: 50%;
+    transform: translateX(-50%);
+    white-space: nowrap;
+    font-family: var(--font-serif);
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    background: rgba(2, 2, 8, 0.75);
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    border: 1px solid rgba(255, 215, 0, 0.1);
+    transition: all 0.3s ease;
+    pointer-events: none;
+  }
+
+  .temple-node:hover .temple-node-label {
+    color: var(--gold-light);
+    border-color: rgba(255, 215, 0, 0.3);
+  }
+
+  .temple-node.active .temple-node-label {
+    color: var(--gold-primary);
+    border-color: var(--gold-primary);
+  }
+
+  /* Detail Drawer (Drawer slides in from the right) */
+  .temple-info-drawer {
+    width: 320px;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    animation: slideInRight 0.4s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
+  }
+
+  .close-drawer-btn {
+    position: absolute;
+    top: 1rem;
+    right: 1.2rem;
+    font-size: 1.8rem;
+    color: var(--text-secondary);
+    line-height: 1;
+    transition: color 0.3s ease;
+  }
+
+  .close-drawer-btn:hover {
+    color: var(--gold-primary);
+  }
+
+  .drawer-inner {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
+  .drawer-header {
+    border-bottom: 1px solid rgba(255, 215, 0, 0.15);
+    padding-bottom: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .temple-number {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    color: var(--gold-light);
+    font-weight: 700;
+    letter-spacing: 2px;
+    margin-bottom: 0.2rem;
+    display: block;
+  }
+
+  .drawer-header h3 {
+    font-size: 1.4rem;
+    letter-spacing: 1px;
+  }
+
+  .drawer-body {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    color: var(--text-secondary);
+  }
+
+  .drawer-visual {
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 215, 0, 0.05);
+    border-radius: 8px;
+    padding: 0.8rem;
+  }
+
+  .temple-pillar-svg {
+    font-size: 2.2rem;
+    line-height: 1;
+  }
+
+  .guardian-brief {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .guardian-brief img {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 1px solid var(--gold-secondary);
+    object-fit: cover;
+    object-position: top center;
+    background: var(--bg-space-fallback);
+  }
+
+  .guardian-brief p {
+    font-size: 0.8rem;
+  }
+
+  .guardian-brief strong {
+    font-family: var(--font-serif);
+    color: var(--gold-primary);
+    font-size: 0.9rem;
+  }
+
+  .temple-lore {
+    font-size: 0.92rem;
+    line-height: 1.6;
+  }
+
+  :global(.drawer-body .btn-gold) {
+    margin-top: 1rem;
+    width: 100%;
+  }
+
+  @keyframes pulseNode {
+    0% { transform: scale(1); opacity: 1; }
+    100% { transform: scale(1.6); opacity: 0; }
+  }
+
+  @keyframes slideInRight {
+    from { opacity: 0; transform: translateX(50px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+
+  @media (max-width: 860px) {
+    .sanctuary-path-wrapper {
+      flex-direction: column;
+    }
+    
+    .mountain-path {
+      height: 450px;
+    }
+    
+    .temple-info-drawer {
+      width: 100%;
+      animation: fadeIn 0.4s ease-out forwards;
+    }
+  }
+</style>
+
+<script>
+  import { goldSaints } from '../data/saintsData.js';
+
+  const romanNumerals = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII'];
+
+  const templeLores = [
+    "La entrada al Santuario. Aquí, el sabio Mu repara las Armaduras de Bronce dañadas de Seiya y sus amigos, enseñándoles la importancia del Séptimo Sentido antes de dejarlos pasar de manera pacífica.",
+    "El primer combate real de las Doce Casas. El gigante Aldebarán bloquea el paso de los santos de bronce. Seiya logra cortar un cuerno del casco dorado de Aldebarán, ganándose su respeto y el derecho de avanzar.",
+    "Un templo laberíntico dominado por ilusiones espaciales. Saga de Géminis controla la armadura vacía a distancia desde el templo del Papa. Shun logra romper la ilusión con su Cadena de Andrómeda.",
+    "El templo del horror, plagado con los rostros de las almas de las víctimas de Máscara de Muerte. Shiryū de Dragón combate al guardián y lo derrota tras ser transportado al Yomotsu Hirasaka.",
+    "Aiolia combate bajo el influjo del control mental del Patriarca (el Satanás Imperial). Cassios se sacrifica para romper el hechizo, permitiendo que Aiolia recupere la razón tras presenciar la muerte de un inocente.",
+    "El templo donde reside Shaka. Seiya, Shiryū y Shun son derrotados fácilmente. Ikki de Fénix llega para entablar un duelo brutal, sacrificando sus propios sentidos para despertar su cosmos máximo y derrotar a Shaka.",
+    "Un templo desierto custodiado espiritualmente por Dohko (el Viejo Maestro de Rozan). Los caballeros de bronce encuentran a Hyōga congelado en el ataúd de Camus. Usan la Espada de Libra de Dohko para liberarlo.",
+    "Milo de Escorpio defiende su templo con la Aguja Escarlata. Hyōga se enfrenta a él en una batalla sangrienta. Tras ver la determinación de Cisne, Milo detiene la hemorragia de Hyōga y le permite seguir adelante.",
+    "El templo del héroe fallecido Aiolos. No hay guardián físico, pero la armadura dispara una flecha que revela la pared secreta con el testamento del caballero: 'A los jóvenes que han venido aquí, les encomiendo la vida de Athena'.",
+    "Shura de Capricornio, poseedor de la espada Excalibur en su brazo derecho, se enfrenta a Shiryū. El Dragón se ve forzado a usar el Último Dragón (un ataque suicida) para ascender al cielo junto a Shura, quien se arrepiente al final.",
+    "Camus de Acuario se enfrenta a su discípulo Hyōga. Camus intenta congelar a Hyōga para protegerlo del combate definitivo, pero Hyōga asimila el Cero Absoluto de su maestro en un duelo épico de Ejecuciones de Aurora.",
+    "El último templo, custodiado por Afrodita, quien sembró un jardín de rosas envenenadas en la escalinata al templo del Papa. Shun derrota a Afrodita con su Tormenta Nebular tras vengar la muerte de su maestro Albiore."
+  ];
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const templeNodes = document.querySelectorAll('.temple-node');
+    const drawer = document.getElementById('temple-drawer');
+    const closeBtn = document.getElementById('close-drawer');
+    
+    const drawerNumber = document.getElementById('drawer-temple-number');
+    const drawerName = document.getElementById('drawer-temple-name');
+    const drawerImg = document.getElementById('drawer-guardian-img') as HTMLImageElement;
+    const drawerGuardianName = document.getElementById('drawer-guardian-name');
+    const drawerLore = document.getElementById('drawer-temple-lore');
+    const inspectContainer = document.getElementById('drawer-inspect-container');
+
+    templeNodes.forEach(node => {
+      node.addEventListener('click', () => {
+        const indexStr = node.getAttribute('data-index');
+        if (indexStr !== null) {
+          selectTemple(parseInt(indexStr));
+        }
+      });
+    });
+
+    if (closeBtn && drawer) {
+      closeBtn.addEventListener('click', () => {
+        drawer.classList.add('hide');
+        templeNodes.forEach(n => n.classList.remove('active'));
+      });
+    }
+
+    function selectTemple(index: number) {
+      templeNodes.forEach((node, idx) => {
+        if (idx === index) {
+          node.classList.add('active');
+        } else {
+          node.classList.remove('active');
+        }
+      });
+
+      const saint = goldSaints[index];
+      if (!saint) return;
+
+      if (drawer) {
+        drawer.classList.remove('hide');
+      }
+
+      if (drawerNumber) drawerNumber.textContent = `Templo ${romanNumerals[index]}`;
+      if (drawerName) drawerName.textContent = saint.temple;
+      if (drawerImg) {
+        drawerImg.src = saint.image;
+        drawerImg.alt = saint.name;
+      }
+      if (drawerGuardianName) drawerGuardianName.textContent = saint.name.split(' de ')[0];
+      if (drawerLore) drawerLore.textContent = templeLores[index] || "Custodiado por un Caballero de Oro.";
+
+      if (inspectContainer) {
+        inspectContainer.innerHTML = '';
+        const inspectBtn = document.createElement('button');
+        inspectBtn.className = 'btn-gold';
+        inspectBtn.textContent = 'Ver en el Códice';
+        inspectBtn.addEventListener('click', () => {
+          // Scroll to codex section
+          const codexSec = document.getElementById('codex-section');
+          if (codexSec) {
+            codexSec.scrollIntoView({ behavior: 'smooth' });
+          }
+
+          // Hydrate selected Saint in Codex
+          setTimeout(() => {
+            if ((window as any).selectSaintInCodex) {
+              (window as any).selectSaintInCodex(saint.id);
+            }
+          }, 500);
+        });
+        inspectContainer.appendChild(inspectBtn);
+      }
+    }
+  });
+</script>

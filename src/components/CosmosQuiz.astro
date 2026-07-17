@@ -1,0 +1,515 @@
+---
+// CosmosQuiz.astro
+---
+
+<section id="quiz-section">
+  <div class="container">
+    <h2 class="section-title gold-text-gradient">Prueba del Cosmos</h2>
+    
+    <div class="quiz-box glass-panel" id="quiz-container">
+      <!-- Start Screen -->
+      <div class="quiz-screen active" id="quiz-start-screen">
+        <div class="quiz-ritual-circle">🪐</div>
+        <h3>¿Qué Caballero Dorado es tu reflejo en el Zodiaco?</h3>
+        <p>El Cosmos no es solo fuerza, es intelecto, templanza, pasión y fe. Responde con sinceridad este ritual de preguntas y sintoniza tu energía con uno de los 12 guardianes dorados.</p>
+        <button class="btn-gold" id="start-quiz-btn">Comenzar Ritual</button>
+      </div>
+
+      <!-- Question Screen -->
+      <div class="quiz-screen" id="quiz-question-screen">
+        <div class="quiz-progress-bar">
+          <div class="progress-fill" id="quiz-progress-fill"></div>
+        </div>
+        <span class="quiz-counter" id="quiz-counter">Pregunta 1 de 5</span>
+        <h3 class="quiz-question" id="quiz-question-text">¿Cómo reaccionas ante una injusticia extrema?</h3>
+        <div class="quiz-options" id="quiz-options-container">
+          <!-- Options rendered dynamically -->
+        </div>
+      </div>
+
+      <!-- Results Screen -->
+      <div class="quiz-screen" id="quiz-results-screen">
+        <div class="result-celebration">✨ TU ALINEACIÓN CÓSMICA ✨</div>
+        <div class="result-card-glow"></div>
+        <div class="result-card" id="result-shareable-card">
+          <div class="result-card-inner">
+            <div class="result-header">
+              <span class="result-badge">Caballero del Zodiaco</span>
+              <h3 id="result-saint-name" class="gold-text-gradient"></h3>
+              <p id="result-saint-title"></p>
+            </div>
+            <div class="result-body">
+              <img id="result-saint-portrait" src="" alt="Saint Portrait" />
+              <div class="result-text-block">
+                <p id="result-saint-desc"></p>
+                <div class="result-traits">
+                  <span class="trait-tag" id="trait-1"></span>
+                  <span class="trait-tag" id="trait-2"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="result-actions">
+          <button class="btn-gold" id="restart-quiz-btn">Volver a Intentar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .quiz-box {
+    max-width: 700px;
+    width: 100%;
+    margin: 0 auto;
+    min-height: 420px;
+    padding: 3rem 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .quiz-screen {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    width: 100%;
+    animation: fadeIn 0.4s ease-out forwards;
+  }
+
+  .quiz-screen.active {
+    display: flex;
+  }
+
+  /* Start Screen */
+  .quiz-ritual-circle {
+    font-size: 5rem;
+    margin-bottom: 1.5rem;
+    animation: float 5s ease-in-out infinite;
+    filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.3));
+  }
+
+  .quiz-screen h3 {
+    font-family: var(--font-serif);
+    font-size: 1.75rem;
+    color: var(--gold-light);
+    margin-bottom: 1.2rem;
+    letter-spacing: 1px;
+  }
+
+  .quiz-screen p {
+    color: var(--text-secondary);
+    font-size: 1rem;
+    line-height: 1.7;
+    margin-bottom: 2rem;
+    max-width: 550px;
+  }
+
+  /* Progress bar */
+  .quiz-progress-bar {
+    width: 100%;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 3px;
+    margin-bottom: 1.5rem;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    width: 0%;
+    background: var(--gold-cosmic);
+    box-shadow: var(--gold-glow);
+    transition: width 0.4s ease;
+  }
+
+  .quiz-counter {
+    font-family: var(--font-serif);
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--gold-secondary);
+    margin-bottom: 0.5rem;
+  }
+
+  /* Question view */
+  .quiz-question {
+    margin-bottom: 2rem;
+    font-size: 1.5rem !important;
+    color: var(--text-primary) !important;
+  }
+
+  .quiz-options {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: 100%;
+    max-width: 500px;
+  }
+
+  :global(.option-btn) {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 215, 0, 0.15);
+    border-radius: 8px;
+    padding: 1.1rem 1.5rem;
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    text-align: left;
+    transition: all 0.25s ease;
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+  }
+
+  :global(.option-btn:hover) {
+    background: rgba(255, 215, 0, 0.05);
+    border-color: var(--gold-primary);
+    color: var(--gold-light);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(255, 215, 0, 0.08);
+  }
+
+  :global(.option-btn:active) {
+    transform: translateY(0);
+  }
+
+  :global(.option-btn.selected) {
+    background: linear-gradient(90deg, rgba(139, 101, 8, 0.2) 0%, rgba(255, 215, 0, 0.15) 100%);
+    border-color: var(--gold-primary);
+    color: var(--gold-primary);
+    box-shadow: var(--gold-glow);
+  }
+
+  /* Results Screen & Shareable Card */
+  .result-celebration {
+    font-family: var(--font-serif);
+    font-size: 0.9rem;
+    letter-spacing: 4px;
+    color: var(--gold-primary);
+    margin-bottom: 1.5rem;
+    text-shadow: var(--gold-glow);
+  }
+
+  .result-card {
+    width: 100%;
+    max-width: 440px;
+    background: rgba(10, 10, 25, 0.85);
+    border: 2px solid var(--gold-secondary);
+    border-radius: 16px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.6), var(--gold-glow);
+    padding: 2rem;
+    margin-bottom: 2rem;
+    position: relative;
+    overflow: hidden;
+    text-align: left;
+    transition: all 0.5s ease;
+  }
+
+  .result-card::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg, transparent 45%, rgba(255, 215, 0, 0.1) 50%, transparent 55%);
+    transform: rotate(45deg);
+    animation: shineReflect 6s infinite linear;
+    pointer-events: none;
+  }
+
+  .result-header {
+    border-bottom: 1px solid rgba(255, 215, 0, 0.15);
+    padding-bottom: 1rem;
+    margin-bottom: 1.2rem;
+  }
+
+  .result-badge {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    color: var(--gold-light);
+    letter-spacing: 2px;
+    font-weight: 700;
+    display: block;
+    margin-bottom: 0.2rem;
+  }
+
+  .result-header h3 {
+    font-size: 1.8rem;
+    margin-bottom: 0.1rem;
+    letter-spacing: 1px;
+  }
+
+  #result-saint-title {
+    font-size: 0.85rem;
+    font-family: var(--font-serif);
+    color: var(--text-secondary);
+  }
+
+  .result-body {
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+  }
+
+  #result-saint-portrait {
+    width: 110px;
+    height: 145px;
+    object-fit: cover;
+    object-position: top center;
+    border-radius: 6px;
+    border: 1px solid var(--gold-secondary);
+    background: var(--bg-space-fallback);
+    flex-shrink: 0;
+  }
+
+  .result-text-block {
+    flex-grow: 1;
+  }
+
+  #result-saint-desc {
+    font-size: 0.86rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+    margin-bottom: 1rem;
+    max-height: 90px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .result-traits {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+
+  .trait-tag {
+    background: rgba(255, 215, 0, 0.08);
+    border: 1px solid rgba(255, 215, 0, 0.25);
+    color: var(--gold-light);
+    font-size: 0.72rem;
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+  }
+
+  .result-actions {
+    display: flex;
+    gap: 1rem;
+  }
+
+  @keyframes shineReflect {
+    0% { transform: translate(-30%, -30%) rotate(45deg); }
+    100% { transform: translate(30%, 30%) rotate(45deg); }
+  }
+
+  @media (max-width: 580px) {
+    .result-body {
+      flex-direction: column;
+      text-align: center;
+    }
+    
+    #result-saint-portrait {
+      width: 100px;
+      height: 130px;
+    }
+    
+    .result-traits {
+      justify-content: center;
+    }
+  }
+</style>
+
+<script>
+  import { goldSaints } from '../data/saintsData.js';
+
+  const quizQuestions = [
+    {
+      question: "Frente a un gran dilema moral o peligro inminente, ¿cuál es tu primera reacción?",
+      options: [
+        { text: "Analizar con paciencia y buscar restaurar el equilibrio de forma pacífica.", weights: { mu: 3, dohko: 2, shaka: 2 } },
+        { text: "Enfrentarlo de frente con toda mi fuerza física y valor inquebrantable.", weights: { aldebaran: 3, aiolia: 3, milo: 2 } },
+        { text: "Actuar con fría lógica, reprimiendo cualquier emoción para ejecutar el deber.", weights: { camus: 3, shura: 3, shaka: 1 } },
+        { text: "Hacer lo que sea necesario para imponer el orden, sin importar la moralidad de los medios.", weights: { saga: 3, deathmask: 3, aphrodite: 2 } }
+      ]
+    },
+    {
+      question: "¿Qué tipo de destreza cósmica crees que encaja mejor con tu espíritu?",
+      options: [
+        { text: "Barreras defensivas impenetrables y teletransportación psíquica.", weights: { mu: 3, shaka: 2, dohko: 1 } },
+        { text: "Impactos colosales y ráfagas físicas directas a la velocidad de la luz.", weights: { aiolia: 3, aldebaran: 2, aiolos: 3 } },
+        { text: "Manipulación de temperaturas gélidas o del espacio y dimensiones.", weights: { camus: 3, saga: 3, shura: 1 } },
+        { text: "Técnicas sutiles ligadas a espíritus, picaduras venenosas o flores letales.", weights: { deathmask: 3, milo: 3, aphrodite: 3 } }
+      ]
+    },
+    {
+      question: "¿Cuál consideras que es tu mayor fortaleza interna?",
+      options: [
+        { text: "La sabiduría espiritual y la capacidad de meditación profunda.", weights: { shaka: 3, dohko: 3, mu: 2 } },
+        { text: "La lealtad ciega y el honor hacia mis ideales y mis mentores.", weights: { aiolos: 3, shura: 3, aiolia: 2 } },
+        { text: "La nobleza, camaradería y protección hacia los más vulnerables.", weights: { aldebaran: 3, milo: 3, dohko: 1 } },
+        { text: "La ambición inquebrantable y el impulso constante de superación.", weights: { saga: 3, deathmask: 2, aphrodite: 2 } }
+      ]
+    },
+    {
+      question: "¿Qué entorno sintoniza mejor con tu paz mental?",
+      options: [
+        { text: "Un templo sereno rodeado de cascadas eternas o lagos sagrados.", weights: { dohko: 3, shaka: 3, mu: 1 } },
+        { text: "Una planicie expuesta a tormentas eléctricas y lluvias estelares.", weights: { aiolia: 3, aiolos: 3, mu: 2 } },
+        { text: "Un desierto congelado y montañoso cubierto por nieve perpetua.", weights: { camus: 3, shura: 2, aldebaran: 1 } },
+        { text: "Un jardín de rosas majestuosas o una dimensión de portales estrellados.", weights: { aphrodite: 3, saga: 3, deathmask: 2, milo: 1 } }
+      ]
+    },
+    {
+      question: "Para ti, ¿qué representa la energía del Cosmos?",
+      options: [
+        { text: "La armonía universal y la comunión con el Todo celestial.", weights: { shaka: 3, mu: 2, dohko: 3 } },
+        { text: "Un fuego interior latente que estalla con fuerza ante la injusticia.", weights: { aiolia: 3, aldebaran: 2, milo: 3 } },
+        { text: "Una fuerza de voluntad pura, afilada como el acero de una espada.", weights: { shura: 3, aiolos: 2, camus: 1 } },
+        { text: "Una fuerza dual de luz y oscuridad capaz de colapsar galaxias.", weights: { saga: 3, camus: 2, deathmask: 2, aphrodite: 2 } }
+      ]
+    }
+  ];
+
+  const saintTraits: Record<string, string[]> = {
+    mu: ["Muro de Cristal", "Sabiduría Estelar"],
+    aldebaran: ["Gran Cuerno", "Nobleza del Toro"],
+    saga: ["Explosión Galáctica", "Alma Dual"],
+    deathmask: ["Paso al Inframundo", "Llamas Espirituales"],
+    aiolia: ["Plasma Relámpago", "Furia Dorada"],
+    shaka: ["Tesoro del Cielo", "Meditación Budista"],
+    dohko: ["Cien Dragones", "Armas Legendarias"],
+    milo: ["Aguja Escarlata", "Orgullo Letal"],
+    aiolos: ["Flecha de la Justicia", "Testamento Sagrado"],
+    shura: ["Corte Excalibur", "Disciplina Estricta"],
+    camus: ["Cero Absoluto", "Frío Imperturbable"],
+    aphrodite: ["Rosas Demoníacas", "Muerte Hermosa"]
+  };
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const startScreen = document.getElementById('quiz-start-screen');
+    const questionScreen = document.getElementById('quiz-question-screen');
+    const resultsScreen = document.getElementById('quiz-results-screen');
+    
+    const startBtn = document.getElementById('start-quiz-btn');
+    const restartBtn = document.getElementById('restart-quiz-btn');
+    
+    const progressFill = document.getElementById('quiz-progress-fill');
+    const counterText = document.getElementById('quiz-counter');
+    const questionText = document.getElementById('quiz-question-text');
+    const optionsContainer = document.getElementById('quiz-options-container');
+    
+    const resultName = document.getElementById('result-saint-name');
+    const resultTitle = document.getElementById('result-saint-title');
+    const resultPortrait = document.getElementById('result-saint-portrait') as HTMLImageElement;
+    const resultDesc = document.getElementById('result-saint-desc');
+    const trait1 = document.getElementById('trait-1');
+    const trait2 = document.getElementById('trait-2');
+
+    let currentQuestionIndex = 0;
+    let scores: Record<string, number> = {};
+
+    function resetQuiz() {
+      currentQuestionIndex = 0;
+      scores = {
+        mu: 0, aldebaran: 0, saga: 0, deathmask: 0, aiolia: 0,
+        shaka: 0, dohko: 0, milo: 0, aiolos: 0, shura: 0,
+        camus: 0, aphrodite: 0
+      };
+    }
+
+    if (startBtn) {
+      startBtn.addEventListener('click', () => {
+        resetQuiz();
+        startScreen?.classList.remove('active');
+        questionScreen?.classList.add('active');
+        showQuestion();
+      });
+    }
+
+    if (restartBtn) {
+      restartBtn.addEventListener('click', () => {
+        resultsScreen?.classList.remove('active');
+        startScreen?.classList.add('active');
+      });
+    }
+
+    function showQuestion() {
+      const q = quizQuestions[currentQuestionIndex];
+      if (!q) {
+        calculateAndShowResult();
+        return;
+      }
+
+      if (progressFill) {
+        const progress = (currentQuestionIndex / quizQuestions.length) * 100;
+        progressFill.style.width = `${progress}%`;
+      }
+      
+      if (counterText) counterText.textContent = `Pregunta ${currentQuestionIndex + 1} de ${quizQuestions.length}`;
+      if (questionText) questionText.textContent = q.question;
+
+      if (optionsContainer) {
+        optionsContainer.innerHTML = '';
+        q.options.forEach((opt) => {
+          const btn = document.createElement('button');
+          btn.className = 'option-btn';
+          btn.textContent = opt.text;
+          
+          btn.addEventListener('click', () => {
+            btn.classList.add('selected');
+            
+            Object.keys(opt.weights).forEach(saintId => {
+              scores[saintId] = (scores[saintId] || 0) + (opt.weights as any)[saintId];
+            });
+
+            setTimeout(() => {
+              currentQuestionIndex++;
+              showQuestion();
+            }, 300);
+          });
+
+          optionsContainer.appendChild(btn);
+        });
+      }
+    }
+
+    function calculateAndShowResult() {
+      if (progressFill) progressFill.style.width = "100%";
+      
+      let winnerId = 'mu';
+      let highestScore = -1;
+
+      Object.keys(scores).forEach(id => {
+        if (scores[id] > highestScore) {
+          highestScore = scores[id];
+          winnerId = id;
+        }
+      });
+
+      const saint = goldSaints.find(s => s.id === winnerId);
+      if (!saint) return;
+
+      if (resultName) resultName.textContent = saint.name;
+      if (resultTitle) resultTitle.textContent = `Guardián de la ${saint.temple}`;
+      if (resultPortrait) {
+        resultPortrait.src = saint.image;
+        resultPortrait.alt = saint.name;
+      }
+      if (resultDesc) resultDesc.textContent = `Tu cosmos está firmemente alineado con ${saint.name}. ${saint.description}`;
+
+      const traits = saintTraits[winnerId] || ["Cosmos Dorado", "Séptimo Sentido"];
+      if (trait1) trait1.textContent = traits[0];
+      if (trait2) trait2.textContent = traits[1];
+
+      questionScreen?.classList.remove('active');
+      resultsScreen?.classList.add('active');
+    }
+  });
+</script>
