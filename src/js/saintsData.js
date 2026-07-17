@@ -1,0 +1,263 @@
+export const goldSaints = [
+  {
+    id: "mu",
+    name: "Mu de Aries",
+    sign: "Aries",
+    constellation: "Carnero (Aries)",
+    temple: "Casa de Aries (El Carnero Blanco)",
+    mal_id: 8838,
+    image: "https://cdn.myanimelist.net/images/characters/7/100769.jpg",
+    age: 20,
+    height: "1.82 m",
+    weight: "75 kg",
+    bloodType: "A",
+    nationality: "Muviano (Tíbet)",
+    trainingPlace: "Jamir, Tíbet",
+    description: "Mu es el guardián de la primera casa del Santuario. Es un caballero extremadamente pacífico, sabio y el único capaz de reparar las armaduras dañadas de los caballeros gracias a su linaje Muviano y a las enseñanzas de su maestro Shion. Detrás de su naturaleza tranquila se esconde un cosmos inmenso y habilidades psicoquinéticas incomparables.",
+    stats: { cosmos: 95, fuerza: 80, velocidad: 90, sabiduria: 98, defensa: 95 },
+    techniques: [
+      { name: "Crystal Wall (Muro de Cristal)", desc: "Crea una barrera invisible de luz psíquica que devuelve cualquier ataque directo a su emisor con la misma fuerza." },
+      { name: "Stardust Revolution (Revolución de Polvo de Estrellas)", desc: "Invoca una lluvia cósmica de estrellas fugaces y meteoros pulverizantes que destruye al enemigo al instante." },
+      { name: "Starlight Extinction (Extinción de Luz Estelar)", desc: "Una técnica de teletransporte ofensiva que utiliza la luz de las estrellas para envolver al enemigo y desvanecerlo de la existencia." }
+    ]
+  },
+  {
+    id: "aldebaran",
+    name: "Aldebarán de Tauro",
+    sign: "Tauro",
+    constellation: "Toro (Taurus)",
+    temple: "Casa de Tauro (El Toro Dorado)",
+    mal_id: 17971,
+    image: "https://cdn.myanimelist.net/images/characters/10/290893.jpg",
+    age: 20,
+    height: "2.10 m",
+    weight: "130 kg",
+    bloodType: "B",
+    nationality: "Brasileño",
+    trainingPlace: "Montañas Rocosas, EE. UU.",
+    description: "Aldebarán es el guardián del segundo templo. Conocido por su descomunal fuerza física y su inquebrantable sentido del honor. Es un guerrero noble y jovial que adopta la táctica defensiva del 'Iaijutsu' (mantener los brazos cruzados para pasar instantáneamente de la defensa al ataque con una velocidad increíble).",
+    stats: { cosmos: 85, fuerza: 98, velocidad: 80, sabiduria: 82, defensa: 95 },
+    techniques: [
+      { name: "Great Horn (Gran Cuerno)", desc: "El usuario acumula su Cosmos y lo libera en forma de una destructiva onda de choque dorada a la velocidad de la luz, manteniendo una postura defensiva inicial." },
+      { name: "Titan's Nova (Nova del Titán)", desc: "Una poderosa técnica introducida en Lost Canvas y Soul of Gold donde golpea la tierra destrozando el suelo con una explosión sísmica cósmica." }
+    ]
+  },
+  {
+    id: "saga",
+    name: "Saga de Géminis",
+    sign: "Géminis",
+    constellation: "Gemelos (Gemini)",
+    temple: "Casa de Géminis (El Templo de los Gemelos)",
+    mal_id: 5912,
+    image: "https://cdn.myanimelist.net/images/characters/16/247911.jpg",
+    age: 28,
+    height: "1.88 m",
+    weight: "87 kg",
+    bloodType: "AB",
+    nationality: "Griego",
+    trainingPlace: "Santuario, Grecia",
+    description: "Saga es uno de los caballeros más poderosos y trágicos del Santuario. Sufre de un severo trastorno de doble personalidad, dividiéndose entre un lado divino y bondadoso, y una parte oscura y ambiciosa que llegó a asesinar al Sumo Sacerdote Shion para usurpar el trono. Su Cosmos es colosal, capaz de distorsionar el espacio y controlar mentes.",
+    stats: { cosmos: 99, fuerza: 95, velocidad: 96, sabiduria: 90, defensa: 92 },
+    techniques: [
+      { name: "Galaxian Explosion (Explosión de Galaxias)", desc: "El ataque físico más devastador de Géminis. Proyecta una ola masiva de energía cósmica que simula la violenta colisión de planetas y galaxias." },
+      { name: "Another Dimension (Otra Dimensión)", desc: "Desgarra el tejido del espacio-tiempo para abrir un portal dimensional y desterrar a sus oponentes a un vacío infinito." },
+      { name: "Genma Ken (Satanás Imperial)", desc: "Un golpe ilusorio directo al cerebro que doblega la voluntad del oponente, obligándolo a obedecer ciegamente hasta que asesine a alguien." }
+    ]
+  },
+  {
+    id: "deathmask",
+    name: "Máscara de Muerte de Cáncer",
+    sign: "Cáncer",
+    constellation: "Cangrejo (Cancer)",
+    temple: "Casa de Cáncer (El Templo de los Cangrejos)",
+    mal_id: 9283,
+    image: "https://cdn.myanimelist.net/images/characters/5/100529.jpg",
+    age: 23,
+    height: "1.84 m",
+    weight: "82 kg",
+    bloodType: "A",
+    nationality: "Italiano",
+    trainingPlace: "Sicilia, Italia",
+    description: "Máscara de Muerte es el guardián de la cuarta casa. Cree firmemente que 'la fuerza define la justicia' y adorna las paredes de su templo con los rostros de sus víctimas. Tiene una conexión espiritual única con el Yomotsu Hirasaka (la colina que conecta el mundo de los vivos con el de los muertos), cruzando el límite a voluntad.",
+    stats: { cosmos: 88, fuerza: 85, velocidad: 88, sabiduria: 80, defensa: 84 },
+    techniques: [
+      { name: "Sekishiki Meikai Ha (Ondas del Inframundo)", desc: "Concentra el cosmos en la punta de su dedo índice para crear una espiral de energía espiritual que arranca el alma del oponente y la envía al Yomotsu." },
+      { name: "Sekishiki Konsou Ha (Llamas Azules del Yomotsu)", desc: "Utiliza las almas perdidas a su alrededor como combustible para crear explosiones de fuego espiritual que consumen la vida del enemigo." }
+    ]
+  },
+  {
+    id: "aiolia",
+    name: "Aiolia de Leo",
+    sign: "Leo",
+    constellation: "León (Leo)",
+    temple: "Casa de Leo (El Templo del León Dorado)",
+    mal_id: 9519,
+    image: "https://cdn.myanimelist.net/images/characters/4/292220.jpg",
+    age: 20,
+    height: "1.85 m",
+    weight: "85 kg",
+    bloodType: "O",
+    nationality: "Griego",
+    trainingPlace: "Santuario, Grecia",
+    description: "Hermano menor del traidor Aiolos de Sagitario, Aiolia creció bajo el desprecio del Santuario, lo que forjó en él un carácter impetuoso y un ferviente deseo de demostrar su lealtad a Athena. Es un caballero directo, de corazón noble y un estilo de combate puramente ofensivo que se basa en la velocidad de la luz y feroces ráfagas de energía.",
+    stats: { cosmos: 93, fuerza: 94, velocidad: 98, sabiduria: 84, defensa: 86 },
+    techniques: [
+      { name: "Lightning Plasma (Plasma Relámpago)", desc: "Lanza millones de ráfagas de puñetazos de luz por segundo que crean una red de cortes de plasma inescapable y destructiva." },
+      { name: "Lightning Bolt (Cápsula de Poder)", desc: "Concentra una gran cantidad de energía cósmica en un solo puño para disparar una masiva esfera de energía que explota al contacto." },
+      { name: "Lightning Photon Burst (Explosión Fotónica)", desc: "Crea fotones de luz pura que penetran en el interior del cuerpo del oponente y explotan desde adentro, consumiendo una inmensa cantidad de energía." }
+    ]
+  },
+  {
+    id: "shaka",
+    name: "Shaka de Virgo",
+    sign: "Virgo",
+    constellation: "Virgen (Virgo)",
+    temple: "Casa de Virgo (El Templo de la Virgen)",
+    mal_id: 9240,
+    image: "https://cdn.myanimelist.net/images/characters/2/290898.jpg",
+    age: 20,
+    height: "1.82 m",
+    weight: "68 kg",
+    bloodType: "AB",
+    nationality: "Indio",
+    trainingPlace: "Cuenca del Río Ganges, India",
+    description: "Considerado 'el hombre más cercano a Dios', Shaka es el Caballero de Oro de Virgo. Acumula su inmenso cosmos manteniendo los ojos cerrados de forma permanente, privándose de la vista para estallar su Cosmos al abrirlos. Es capaz de comunicarse con los dioses y reencarnar gracias a que domina el Arayashiki (el octavo sentido).",
+    stats: { cosmos: 99, fuerza: 86, velocidad: 95, sabiduria: 99, defensa: 98 },
+    techniques: [
+      { name: "Tenbu Hōrin (El Tesoro del Cielo)", desc: "El ataque definitivo de Virgo que combina defensa y ataque. Atrapa al enemigo en un mandala ilusorio y suprime progresivamente sus cinco sentidos y el pensamiento." },
+      { name: "Rikū Rikudō Rinne (Los Seis Senderos de la Transmigración)", desc: "Envía el alma del oponente a vagar por uno de los seis mundos budistas de la reencarnación: el Infierno, los Demonios Hambrientos, las Bestias, los Asuras, los Humanos o el Cielo." },
+      { name: "Kān (Ohm - Kan)", desc: "Una sílaba sagrada que genera un campo de fuerza dorado absoluto que repele cualquier ataque cósmico o físico." }
+    ]
+  },
+  {
+    id: "dohko",
+    name: "Dohko de Libra",
+    sign: "Libra",
+    constellation: "Balanza (Libra)",
+    temple: "Casa de Libra (El Templo de la Balanza)",
+    mal_id: 16734,
+    image: "https://cdn.myanimelist.net/images/characters/15/120339.jpg",
+    age: 261, // Edad real, aunque rejuvenece
+    height: "1.70 m",
+    weight: "70 kg",
+    bloodType: "A",
+    nationality: "Chino",
+    trainingPlace: "Cinco Picos de Rozan, China",
+    description: "Dohko (el Viejo Maestro) es uno de los dos supervivientes de la anterior Guerra Santa del siglo XVIII. Recibió el don de Athena de la Misopethamenos, lo que le permitió mantener un latido cardíaco de solo 100,000 veces al año (1 día de envejecimiento por año real), resguardando el sello de Hades en los Cinco Picos de Rozan mientras custodiaba las poderosas 12 Armas de Libra.",
+    stats: { cosmos: 98, fuerza: 92, velocidad: 92, sabiduria: 99, defensa: 97 },
+    techniques: [
+      { name: "Rozan Sho Ryu Ha (Dragón Naciente de Rozan)", desc: "Invoca la fuerza de una gran cascada en reversa para lanzar un puñetazo ascendente que toma la forma de un dragón dorado destructivo." },
+      { name: "Rozan Hyaku Ryu Ha (Los Cien Dragones de Rozan)", desc: "El ataque supremo de Libra. Desata cien dragones de energía cósmica pura que devoran y destruyen todo en su trayectoria." },
+      { name: "Libra Weapons (Armas de Libra)", desc: "Usa el set sagrado de 12 armas de oro (espadas, tridentes, escudos, tonfas, nunchakus, barras dobles) permitidas por Athena solo en casos extremos de justicia." }
+    ]
+  },
+  {
+    id: "milo",
+    name: "Milo de Escorpio",
+    sign: "Escorpio",
+    constellation: "Escorpión (Scorpius)",
+    temple: "Casa de Escorpio (El Templo del Escorpión Blanco)",
+    mal_id: 8766,
+    image: "https://cdn.myanimelist.net/images/characters/7/225607.jpg",
+    age: 20,
+    height: "1.85 m",
+    weight: "84 kg",
+    bloodType: "B",
+    nationality: "Griego",
+    trainingPlace: "Isla de Milos, Grecia",
+    description: "Milo es el orgulloso guardián de la octava casa. Es sumamente pasional, impulsivo y posee una gran camaradería (especialmente con Camus). Su estilo de pelea es letal y tortuoso, asestando picaduras de energía con su dedo que imitan la constelación de Escorpio, dando a sus rivales la opción de rendirse o morir desangrados.",
+    stats: { cosmos: 90, fuerza: 88, velocidad: 94, sabiduria: 83, defensa: 85 },
+    techniques: [
+      { name: "Restriction (Restricción)", desc: "Emite ondas concéntricas de cosmos que paralizan completamente el sistema nervioso del oponente, impidiéndole moverse." },
+      { name: "Scarlet Needle (Aguja Escarlata)", desc: "Lanza 15 picaduras consecutivas de luz roja que perforan el cuerpo provocando dolor extremo y sangrado continuo." },
+      { name: "Antares (Aguja Escarlata de Antares)", desc: "El 15vo golpe definitivo alineado con la estrella gigante Antares. Si el oponente no se rinde, este golpe resulta letal al colapsar su sistema circulatorio." }
+    ]
+  },
+  {
+    id: "aiolos",
+    name: "Aiolos de Sagitario",
+    sign: "Sagitario",
+    constellation: "Centauro (Sagittarius)",
+    temple: "Casa de Sagitario (El Templo del Centauro)",
+    mal_id: 16738,
+    image: "https://cdn.myanimelist.net/images/characters/8/236801.jpg",
+    age: 14, // Falleció a esa edad
+    height: "1.87 m",
+    weight: "85 kg",
+    bloodType: "O",
+    nationality: "Griego",
+    trainingPlace: "Santuario, Grecia",
+    description: "Aiolos es el héroe legendario del Santuario. Hace 13 años, descubrió la conspiración de Saga y rescató a la bebé Athena de la muerte a costa de su propia vida, siendo difamado como traidor. Aunque falleció, su alma y cosmos residen en la Armadura de Sagitario, la cual acude a socorrer a Seiya en momentos de peligro. Su testamento inspira a las futuras generaciones.",
+    stats: { cosmos: 97, fuerza: 91, velocidad: 95, sabiduria: 98, defensa: 90 },
+    techniques: [
+      { name: "Atomic Thunderbolt (Trueno Atómico)", desc: "Una rápida ráfaga de esferas de luz y rayos eléctricos dorados que pulverizan al objetivo a distancia." },
+      { name: "Infinity Break (Ruptura del Infinito)", desc: "Materializa flechas de cosmos de luz dorada infinita que llueven en todas direcciones perforando cualquier defensa enemiga." },
+      { name: "Golden Arrow (Flecha de Oro de Sagitario)", desc: "Concentra el cosmos de la justicia y de los caballeros caídos en la punta de su flecha dorada para dar un tiro imparable y divino." }
+    ]
+  },
+  {
+    id: "shura",
+    name: "Shura de Capricornio",
+    sign: "Capricornio",
+    constellation: "Cabra-Pez (Capricornus)",
+    temple: "Casa de Capricornio (El Templo de la Cabra Montesa)",
+    mal_id: 7370,
+    image: "https://cdn.myanimelist.net/images/characters/14/290896.jpg",
+    age: 23,
+    height: "1.86 m",
+    weight: "83 kg",
+    bloodType: "B",
+    nationality: "Español",
+    trainingPlace: "Montes Pirineos, España",
+    description: "Shura es el guardián de la décima casa y se jactaba de ser el 'caballero más leal a Athena'. En el pasado, fue enviado a ejecutar al 'traidor' Aiolos. Sus extremidades, especialmente su brazo derecho, están tan afiladas que albergan el poder de la espada sagrada legendaria Excalibur, capaz de cortar cualquier materia.",
+    stats: { cosmos: 91, fuerza: 92, velocidad: 93, sabiduria: 85, defensa: 88 },
+    techniques: [
+      { name: "Excalibur (Espada Sagrada Excalibur)", desc: "Desata cortes de energía cortante pura con sus brazos y piernas que pueden rebanar armaduras, la tierra o dimensiones a la velocidad de la luz." },
+      { name: "Jumping Stone (Piedra Saltarina)", desc: "Una técnica de contraataque que utiliza la fuerza del ataque de su rival para levantarlo por los aires y lanzarlo con una patada acrobática." }
+    ]
+  },
+  {
+    id: "camus",
+    name: "Camus de Acuario",
+    sign: "Acuario",
+    constellation: "Portador de Agua (Aquarius)",
+    temple: "Casa de Acuario (El Templo de la Urna)",
+    mal_id: 5730,
+    image: "https://cdn.myanimelist.net/images/characters/10/57608.jpg",
+    age: 20,
+    height: "1.84 m",
+    weight: "76 kg",
+    bloodType: "A",
+    nationality: "Francés",
+    trainingPlace: "Siberia, Rusia",
+    description: "Camus es el guardián de la undécima casa y maestro de Hyōga de Cisne. Es conocido como el 'Mago del Hielo y del Agua'. Mantiene una postura fría e imperturbable bajo cualquier circunstancia, creyendo que un caballero jamás debe mostrar emociones en batalla. Entrena a sus alumnos para alcanzar el Cero Absoluto (-273.15 °C), la temperatura donde todo movimiento molecular cesa.",
+    stats: { cosmos: 94, fuerza: 86, velocidad: 90, sabiduria: 96, defensa: 93 },
+    techniques: [
+      { name: "Aurora Execution (Ejecución de la Aurora)", desc: "La técnica máxima del frío. Lanza una descarga masiva de cosmos helado desde sus manos unidas en forma de vasija que roza el Cero Absoluto." },
+      { name: "Freezing Coffin (Ataúd de Hielo)", desc: "Encierra al objetivo en un bloque de hielo impenetrable y eterno que no puede ser destruido ni siquiera por la fuerza conjunta de varios Caballeros de Oro." },
+      { name: "Kolitso (Anillos de Hielo)", desc: "Crea anillos de viento congelante que rodean y restringen los movimientos del oponente de forma progresiva." }
+    ]
+  },
+  {
+    id: "aphrodite",
+    name: "Afrodita de Piscis",
+    sign: "Piscis",
+    constellation: "Peces (Pisces)",
+    temple: "Casa de Piscis (El Templo de los Peces Gemelos)",
+    mal_id: 16744,
+    image: "https://cdn.myanimelist.net/images/characters/16/371483.jpg",
+    age: 22,
+    height: "1.83 m",
+    weight: "72 kg",
+    bloodType: "O",
+    nationality: "Sueco",
+    trainingPlace: "Isla de la Isla de Andrómeda, Etiopía",
+    description: "Considerado el 'caballero más hermoso del Santuario', Afrodita de Piscis resguarda la última casa. Cree que la paz solo se mantiene a través de un poder absoluto (por lo que aceptó al Patriarca malvado). Utiliza rosas impregnadas de cosmos venenoso para atacar y sembrar la muerte silenciosa entre los enemigos que osen pisar su templo o el camino a la recámara del Papa.",
+    stats: { cosmos: 89, fuerza: 82, velocidad: 91, sabiduria: 88, defense: 83 },
+    techniques: [
+      { name: "Royal Demon Rose (Rosas Demoníacas Reales)", desc: "Lanza rosas rojas venenosas cuyas espinas y fragancia adormecen progresivamente los sentidos y causan una muerte indolora." },
+      { name: "Piranha Rose (Rosas Piraña)", desc: "Rosas negras con espinas tan duras como el metal que devoran y destruyen cualquier armadura o materia al contacto." },
+      { name: "Bloody Rose (Rosa Sangrienta)", desc: "Una sola rosa blanca que viaja directa al corazón del oponente. Una vez clavada, absorbe la sangre tiñéndose de rojo hasta causarle la muerte absoluta." }
+    ]
+  }
+];

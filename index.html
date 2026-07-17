@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <!-- SEO Meta Tags -->
+    <title>Saint Seiya: Caballeros de Oro | Codex y Santuario</title>
+    <meta name="description" content="Explora el cosmos de los 12 Caballeros de Oro de Saint Seiya. Descubre sus técnicas, recorre los templos del Santuario y descubre tu alineación de Cosmos." />
+    <meta name="keywords" content="Saint Seiya, Caballeros de Oro, Gold Saints, Santuario, Zodiaco, Atena, Cosmos, Seiya" />
+    <meta name="author" content="Pablo Cornejo" />
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>👑</text></svg>" />
+  </head>
+  <body>
+    <!-- Canvas for interactive cosmic space particle system -->
+    <canvas id="space-canvas"></canvas>
+    <div class="cosmic-nebula"></div>
+
+    <!-- Background music (ambient/silent by default to respect browser policies) -->
+    <audio id="bg-music" loop preload="auto">
+      <source src="https://assets.mixkit.co/active_storage/sfx/2568/2568-84.wav" type="audio/wav">
+    </audio>
+
+    <!-- Header & Navigation -->
+    <header id="site-header">
+      <div class="container">
+        <a href="#hero-section" class="logo gold-text-gradient">SAINT SEIYA <span>GOLD</span></a>
+        
+        <div class="menu-toggle" id="mobile-menu-btn" aria-label="Toggle Menu">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+
+        <nav>
+          <ul class="nav-links" id="nav-menu">
+            <li><a href="#hero-section" id="nav-item-home">Inicio</a></li>
+            <li><a href="#codex-section" id="nav-item-codex">Caballeros</a></li>
+            <li><a href="#sanctuary-section" id="nav-item-sanctuary">El Santuario</a></li>
+            <li><a href="#quiz-section" id="nav-item-quiz">Alineación</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+      <!-- Hero Section -->
+      <section id="hero-section">
+        <div class="container hero-content">
+          <div class="hero-text glass-panel">
+            <h1 class="gold-text-gradient">El Poder del Cosmos Dorado</h1>
+            <p class="hero-subtitle">Custodios del Santuario de Atena y dueños del Séptimo Sentido</p>
+            <p class="hero-desc">
+              Adéntrate en la senda celestial de los doce protectores zodiacales. Explora sus técnicas legendarias, asciende las doce escalinatas del Santuario y despierta el Cosmos divino que reside en tu interior.
+            </p>
+            <div class="hero-buttons">
+              <a href="#codex-section" class="btn-gold" id="hero-btn-codex">Ver Caballeros</a>
+              <a href="#sanctuary-section" class="btn-gold" id="hero-btn-sanctuary">Subir el Templo</a>
+            </div>
+          </div>
+          <div class="hero-zodiac-wheel">
+            <div class="zodiac-circle" id="zodiac-interactive-wheel">
+              <!-- Sign items will be rendered via JS or CSS -->
+              <div class="zodiac-center">
+                <div class="gold-seal"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Codex Section (Gold Saints Showcase) -->
+      <section id="codex-section">
+        <div class="container">
+          <h2 class="section-title gold-text-gradient">El Códice Dorado</h2>
+          <p class="section-subtitle-text">Selecciona un signo zodiacal para revelar el cosmos, atributos e historia de su legendario Caballero de Oro.</p>
+          
+          <div class="codex-container">
+            <!-- Grid of 12 signs -->
+            <div class="signs-grid" id="signs-selector-grid">
+              <!-- Generated dynamically by JS -->
+            </div>
+
+            <!-- Detailed Saint Panel (Dashboard) -->
+            <div class="saint-details-view glass-panel" id="saint-details-card">
+              <div class="details-placeholder" id="details-empty-state">
+                <div class="placeholder-icon">⚜️</div>
+                <h3>Elige un Signo del Zodiaco</h3>
+                <p>Eleva tu cosmos para invocar el expediente secreto del Caballero guardián.</p>
+              </div>
+
+              <div class="details-content hide" id="details-real-content">
+                <div class="saint-main-info">
+                  <div class="saint-portrait-container">
+                    <img id="saint-portrait" src="" alt="Caballero" />
+                    <div class="portrait-glow"></div>
+                  </div>
+                  <div class="saint-identity">
+                    <span class="zodiac-sign-badge" id="saint-sign-badge">Aries</span>
+                    <h3 id="saint-name" class="gold-text-gradient">Mu de Aries</h3>
+                    <p class="saint-temple-name" id="saint-temple-name">Casa de Aries</p>
+                    
+                    <div class="saint-bio-grid">
+                      <div class="bio-item"><strong>Edad:</strong> <span id="bio-age">20</span></div>
+                      <div class="bio-item"><strong>Altura:</strong> <span id="bio-height">1.82 m</span></div>
+                      <div class="bio-item"><strong>Peso:</strong> <span id="bio-weight">75 kg</span></div>
+                      <div class="bio-item"><strong>Sangre:</strong> <span id="bio-blood">A</span></div>
+                      <div class="bio-item"><strong>Origen:</strong> <span id="bio-origin">Tíbet</span></div>
+                      <div class="bio-item"><strong>Entrenamiento:</strong> <span id="bio-training">Jamir</span></div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="saint-details-tabs">
+                  <div class="tabs-header">
+                    <button class="tab-btn active" data-tab="lore" id="tab-btn-lore">Historia</button>
+                    <button class="tab-btn" data-tab="stats" id="tab-btn-stats">Atributos</button>
+                    <button class="tab-btn" data-tab="attacks" id="tab-btn-attacks">Técnicas</button>
+                  </div>
+                  <div class="tabs-content">
+                    <div class="tab-pane active" id="pane-lore">
+                      <p id="saint-description">Cargando descripción...</p>
+                    </div>
+                    <div class="tab-pane" id="pane-stats">
+                      <div class="stats-bars-container" id="stats-bars">
+                        <!-- Stat bars rendered dynamically -->
+                      </div>
+                    </div>
+                    <div class="tab-pane" id="pane-attacks">
+                      <div class="techniques-list" id="techniques-list">
+                        <!-- Techniques list rendered dynamically -->
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Sanctuary Path Section -->
+      <section id="sanctuary-section">
+        <div class="container">
+          <h2 class="section-title gold-text-gradient">La Senda de las 12 Casas</h2>
+          <p class="section-subtitle-text">Recorre el sendero empinado del Santuario de Atena. Haz clic en cada templo para explorar su custodiado misterio.</p>
+          
+          <div class="sanctuary-path-wrapper">
+            <!-- Mountain outline path -->
+            <div class="mountain-path" id="mountain-interactive-path">
+              <!-- SVG path representing the mountain climb -->
+              <svg viewBox="0 0 800 600" class="path-svg">
+                <path d="M 100 500 Q 200 450 300 400 T 500 300 T 700 200 T 500 100" fill="none" stroke="rgba(255, 215, 0, 0.15)" stroke-width="6" stroke-dasharray="10 5" />
+              </svg>
+              
+              <!-- 12 Temple Nodes placed along the mountain path -->
+              <div class="temples-nodes-container" id="temple-nodes-container">
+                <!-- Dynamically generated temple steps -->
+              </div>
+            </div>
+
+            <!-- Detail modal or drawer for the current temple -->
+            <div class="temple-info-drawer glass-panel" id="temple-drawer">
+              <button class="close-drawer-btn" id="close-drawer" aria-label="Cerrar">×</button>
+              <div class="drawer-inner">
+                <div class="drawer-header">
+                  <span class="temple-number" id="drawer-temple-number">Casa I</span>
+                  <h3 id="drawer-temple-name" class="gold-text-gradient">Templo de Aries</h3>
+                </div>
+                <div class="drawer-body">
+                  <div class="drawer-visual">
+                    <div class="temple-pillar-svg">🏛️</div>
+                    <div class="guardian-brief">
+                      <img id="drawer-guardian-img" src="" alt="Guardian" />
+                      <p>Guardián: <strong id="drawer-guardian-name">Mu</strong></p>
+                    </div>
+                  </div>
+                  <p class="temple-lore" id="drawer-temple-lore">Aquí comienza la escalada. Este templo resguarda la entrada del Santuario.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Quiz Section -->
+      <section id="quiz-section">
+        <div class="container">
+          <h2 class="section-title gold-text-gradient">Prueba del Cosmos</h2>
+          
+          <div class="quiz-box glass-panel" id="quiz-container">
+            <!-- Start Screen -->
+            <div class="quiz-screen active" id="quiz-start-screen">
+              <div class="quiz-ritual-circle">🪐</div>
+              <h3>¿Qué Caballero Dorado es tu reflejo en el Zodiaco?</h3>
+              <p>El Cosmos no es solo fuerza, es intelecto, templanza, pasión y fe. Responde con sinceridad este ritual de preguntas y sintoniza tu energía con uno de los 12 guardianes dorados.</p>
+              <button class="btn-gold" id="start-quiz-btn">Comenzar Ritual</button>
+            </div>
+
+            <!-- Question Screen -->
+            <div class="quiz-screen" id="quiz-question-screen">
+              <div class="quiz-progress-bar">
+                <div class="progress-fill" id="quiz-progress-fill"></div>
+              </div>
+              <span class="quiz-counter" id="quiz-counter">Pregunta 1 de 5</span>
+              <h3 class="quiz-question" id="quiz-question-text">¿Cómo reaccionas ante una injusticia extrema?</h3>
+              <div class="quiz-options" id="quiz-options-container">
+                <!-- Options rendered dynamically -->
+              </div>
+            </div>
+
+            <!-- Results Screen -->
+            <div class="quiz-screen" id="quiz-results-screen">
+              <div class="result-celebration">✨ TU ALINEACIÓN CÓSMICA ✨</div>
+              <div class="result-card-glow"></div>
+              <div class="result-card" id="result-shareable-card">
+                <div class="result-card-inner">
+                  <div class="result-header">
+                    <span class="result-badge">Caballero del Zodiaco</span>
+                    <h3 id="result-saint-name" class="gold-text-gradient">Saga de Géminis</h3>
+                    <p id="result-saint-title">Guardián de la Tercera Casa</p>
+                  </div>
+                  <div class="result-body">
+                    <img id="result-saint-portrait" src="" alt="Saint Portrait" />
+                    <div class="result-text-block">
+                      <p id="result-saint-desc">Tu cosmos se alinea con la dualidad y el inmenso poder de Géminis...</p>
+                      <div class="result-traits">
+                        <span class="trait-tag" id="trait-1">Cosmos Infinito</span>
+                        <span class="trait-tag" id="trait-2">Espacio-Tiempo</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="result-actions">
+                <button class="btn-gold" id="restart-quiz-btn">Volver a Intentar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+      <div class="container footer-content">
+        <p>© 2026 Saint Seiya: Gold Knights. Diseñado para fines de demostración por Pablo Cornejo.</p>
+        <p class="footer-sub">Los personajes, nombres e imágenes pertenecen a Masami Kurumada / Toei Animation / MyAnimeList.</p>
+      </div>
+    </footer>
+
+    <!-- Sound Controller Floating Button -->
+    <div class="sound-toggle-container">
+      <button class="btn-sound" id="music-toggle" aria-label="Mute/Unmute Music">
+        <!-- Speaker Icon -->
+        <svg viewBox="0 0 24 24" id="sound-off-icon">
+          <path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM12 4L9.91 6.09 12 8.18V4zm-8 4v8h4l5 5v-6.18l-5-5H4zm17.65-3.53l-1.41-1.41L2.64 17.65l1.41 1.41 6.13-6.13V20l5-5h3.18l-6.13-6.13 6.13-6.13L21.65 4.47z"/>
+        </svg>
+        <svg viewBox="0 0 24 24" id="sound-on-icon" class="hide">
+          <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Script Entrypoint -->
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
