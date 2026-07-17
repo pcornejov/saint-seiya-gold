@@ -2,35 +2,37 @@
 // SanctuaryPath.astro
 import { goldSaints } from '../data/saintsData.js';
 
-const romanNumerals = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII'];
+const templeLabels = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', '⛎', 'IX', 'X', 'XI', 'XII'];
 
-// Spaced coordinates climbing the mountain (X%, Y% relative to container)
+// Coordinates climbing the mountain (X%, Y% relative to container)
+// Incorporating Ophiuchus (Ofiuco - Odysseus) at index 8
 const templeCoordinates = [
-  { x: 12, y: 84 },  // I. Aries
-  { x: 23, y: 78 },  // II. Tauro
-  { x: 34, y: 71 },  // III. Géminis
-  { x: 44, y: 64 },  // IV. Cáncer
-  { x: 55, y: 58 },  // V. Leo
-  { x: 67, y: 52 },  // VI. Virgo
-  { x: 78, y: 46 },  // VII. Libra
-  { x: 86, y: 38 },  // VIII. Escorpio
-  { x: 77, y: 28 },  // IX. Sagitario
-  { x: 64, y: 22 },  // X. Capricornio
-  { x: 50, y: 17 },  // XI. Acuario
-  { x: 36, y: 11 }   // XII. Piscis
+  { x: 12, y: 84 },  // I. Aries (Shion)
+  { x: 23, y: 78 },  // II. Tauro (Ox)
+  { x: 34, y: 71 },  // III. Géminis (Cain/Abel)
+  { x: 44, y: 64 },  // IV. Cáncer (Deathtoll)
+  { x: 55, y: 58 },  // V. Leo (Kaiser)
+  { x: 67, y: 52 },  // VI. Virgo (Shijima)
+  { x: 78, y: 46 },  // VII. Libra (Dohko)
+  { x: 86, y: 38 },  // VIII. Escorpio (Ecarlate)
+  { x: 83, y: 29 },  // ⛎. Ofiuco (Odysseus) -> Sits between Scorpio and Sagittarius!
+  { x: 71, y: 24 },  // IX. Sagitario (Gestalt)
+  { x: 58, y: 19 },  // X. Capricornio (Izo)
+  { x: 45, y: 14 },  // XI. Acuario (Mystoria)
+  { x: 32, y: 9 }    // XII. Piscis (Cardinale)
 ];
 ---
 
 <section id="sanctuary-section">
   <div class="container">
-    <h2 class="section-title gold-text-gradient">La Senda de las 12 Casas</h2>
-    <p class="section-subtitle-text">Recorre el sendero empinado del Santuario de Atena. Haz clic en cada templo para explorar su custodiado misterio.</p>
+    <h2 class="section-title gold-text-gradient">El Santuario del Siglo XVIII</h2>
+    <p class="section-subtitle-text">Asciende las Doce Casas durante la Guerra Santa del pasado y atestigua el resurgir de la legendaria decimotercera casa.</p>
     
     <div class="sanctuary-path-wrapper">
       <!-- Mountain outline path -->
       <div class="mountain-path" id="mountain-interactive-path">
-        <!-- SVG path representing the mountain climb -->
-        <svg viewBox="0 0 800 600" class="path-svg">
+        <!-- SVG path representing the mountain climb with space-time glow -->
+        <svg viewBox="0 0 800 600" class="path-svg" preserveAspectRatio="none">
           <defs>
             <filter id="gold-path-glow" x="-20%" y="-20%" width="140%" height="140%">
               <feGaussianBlur stdDeviation="5" result="blur" />
@@ -48,21 +50,23 @@ const templeCoordinates = [
           <path d="M 100 500 Q 200 450 300 400 T 500 300 T 700 200 T 500 100" fill="none" stroke="url(#gold-path-grad)" stroke-width="3" stroke-dasharray="12 6" />
         </svg>
         
-        <!-- 12 Temple Nodes, generated statically by Astro! -->
+        <!-- 13 Temple Nodes, generated statically by Astro! -->
         <div class="temples-nodes-container" id="temple-nodes-container" role="group" aria-label="Casas del Santuario">
           {goldSaints.map((saint, index) => {
             const coord = templeCoordinates[index] || { x: 50, y: 50 };
+            const label = templeLabels[index];
+            const isOphiuchus = saint.id === 'odysseus';
             return (
               <button 
-                class="temple-node" 
+                class={`temple-node ${isOphiuchus ? 'ophiuchus-node' : ''}`} 
                 style={`left: ${coord.x}%; top: ${coord.y}%;`} 
                 data-id={saint.id} 
                 data-index={index}
-                aria-label={`Templo ${romanNumerals[index]}. Casa de ${saint.sign}. Guardián: ${saint.name}`}
+                aria-label={`Templo ${label}. Casa de ${saint.sign}. Guardián: ${saint.name}`}
                 aria-expanded="false"
                 aria-controls="temple-drawer"
               >
-                {romanNumerals[index]}
+                {label}
                 <span class="temple-node-label" aria-hidden="true">{saint.sign}</span>
               </button>
             )
@@ -121,7 +125,7 @@ const templeCoordinates = [
     height: 600px;
     background: 
       radial-gradient(circle at bottom right, rgba(184, 134, 11, 0.08) 0%, transparent 60%),
-      radial-gradient(circle at top left, rgba(27, 10, 42, 0.3) 0%, transparent 50%),
+      radial-gradient(circle at top left, rgba(138, 43, 226, 0.25) 0%, transparent 50%),
       radial-gradient(circle at center, rgba(11, 19, 43, 0.4) 0%, rgba(2, 2, 8, 0.8) 100%);
     border: 1.5px solid rgba(255, 215, 0, 0.12);
     border-radius: 16px;
@@ -185,18 +189,95 @@ const templeCoordinates = [
     transition: all 0.3s ease;
   }
 
-  .temple-node:hover {
+  .temple-node:hover,
+  .temple-node:focus-visible {
     border-color: var(--gold-primary);
     color: #fff;
     box-shadow: 
       0 0 20px rgba(255, 215, 0, 0.4),
       0 6px 20px rgba(0, 0, 0, 0.5);
     transform: translate(-50%, -50%) scale(1.2);
+    outline: none;
   }
 
-  .temple-node:hover::after {
+  .temple-node:hover::after,
+  .temple-node:focus-visible::after {
     border-color: rgba(255, 215, 0, 0.35);
     animation: rotateWheel 15s infinite linear;
+  }
+
+  /* Ophiuchus node has a unique celestial glow (red & purple) */
+  .ophiuchus-node {
+    border-color: var(--cosmic-crimson) !important;
+    color: var(--cosmic-crimson-light) !important;
+    box-shadow: 
+      0 0 20px rgba(220, 20, 60, 0.6),
+      0 0 10px rgba(138, 43, 226, 0.4),
+      inset 0 0 10px rgba(220, 20, 60, 0.3);
+    background: radial-gradient(circle, rgba(20, 5, 25, 0.95) 0%, rgba(5, 1, 10, 0.98) 100%) !important;
+    z-index: 5;
+  }
+
+  /* Dual pulsing aura for emerging Ophiuchus */
+  .ophiuchus-node::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    border-radius: 50%;
+    border: 2px solid var(--cosmic-crimson);
+    animation: ophiuchusPulse 2.4s infinite ease-out;
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  .ophiuchus-node::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    border-radius: 50%;
+    border: 2px solid var(--cosmic-purple-light);
+    animation: ophiuchusPulse 2.4s infinite ease-out 1.2s;
+    pointer-events: none;
+    z-index: -1;
+    transform: none; /* override general node::after transition properties */
+  }
+
+  @keyframes ophiuchusPulse {
+    0% {
+      transform: scale(1);
+      opacity: 0.8;
+      box-shadow: 0 0 10px rgba(220, 20, 60, 0.4), 0 0 15px rgba(138, 43, 226, 0.2);
+    }
+    50% {
+      opacity: 0.4;
+      box-shadow: 0 0 20px rgba(220, 20, 60, 0.6), 0 0 25px rgba(138, 43, 226, 0.4);
+    }
+    100% {
+      transform: scale(1.7);
+      opacity: 0;
+      box-shadow: 0 0 30px rgba(220, 20, 60, 0), 0 0 35px rgba(138, 43, 226, 0);
+    }
+  }
+
+  .ophiuchus-node:hover {
+    border-color: var(--cosmic-crimson-light) !important;
+    color: #fff !important;
+    box-shadow: 
+      0 0 30px rgba(220, 20, 60, 0.95),
+      0 0 20px rgba(138, 43, 226, 0.65),
+      0 8px 25px rgba(0, 0, 0, 0.6) !important;
+    transform: translate(-50%, -50%) scale(1.25);
+  }
+
+  .ophiuchus-node.active {
+    background: linear-gradient(135deg, #600010 0%, var(--cosmic-crimson) 50%, var(--cosmic-crimson-light) 100%) !important;
+    border-color: #fff !important;
+    color: #fff !important;
+    box-shadow: 
+      0 0 35px rgba(220, 20, 60, 0.95),
+      0 0 25px rgba(138, 43, 226, 0.7),
+      0 8px 25px rgba(0, 0, 0, 0.7) !important;
+    transform: translate(-50%, -50%) scale(1.3) !important;
   }
 
   .temple-node.active {
@@ -237,6 +318,11 @@ const templeCoordinates = [
     box-shadow: 0 0 10px rgba(255, 215, 0, 0.2), 0 4px 10px rgba(0, 0, 0, 0.5);
   }
 
+  .ophiuchus-node:hover .temple-node-label {
+    border-color: #dc143c;
+    box-shadow: 0 0 10px rgba(220, 20, 60, 0.2), 0 4px 10px rgba(0, 0, 0, 0.5);
+  }
+
   .temple-node.active .temple-node-label {
     color: var(--gold-primary);
     border-color: var(--gold-primary);
@@ -244,7 +330,12 @@ const templeCoordinates = [
     box-shadow: var(--gold-glow), 0 4px 10px rgba(0, 0, 0, 0.6);
   }
 
-  /* Detail Drawer (Drawer slides in from the right) */
+  .ophiuchus-node.active .temple-node-label {
+    color: #ff6688;
+    border-color: #dc143c;
+  }
+
+  /* Detail Drawer */
   .temple-info-drawer {
     width: 360px;
     padding: 2.2rem;
@@ -260,6 +351,15 @@ const templeCoordinates = [
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
     animation: slideInRight 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    transition: border-color 0.4s ease, box-shadow 0.4s ease;
+  }
+
+  .temple-info-drawer.ophiuchus-active {
+    border-color: rgba(220, 20, 60, 0.6);
+    box-shadow: 
+      0 15px 40px rgba(0, 0, 0, 0.8),
+      0 0 20px rgba(220, 20, 60, 0.25),
+      inset 0 0 15px rgba(220, 20, 60, 0.1);
   }
 
   .close-drawer-btn {
@@ -270,10 +370,15 @@ const templeCoordinates = [
     color: var(--text-secondary);
     line-height: 1;
     transition: color 0.3s ease;
+    cursor: pointer;
+    background: none;
+    border: none;
   }
 
-  .close-drawer-btn:hover {
+  .close-drawer-btn:hover,
+  .close-drawer-btn:focus-visible {
     color: var(--gold-primary);
+    outline: none;
   }
 
   .drawer-inner {
@@ -368,6 +473,43 @@ const templeCoordinates = [
     width: 100%;
   }
 
+  /* Ophiuchus active Drawer styling */
+  .temple-info-drawer.ophiuchus-active {
+    border-color: var(--cosmic-crimson);
+    background: radial-gradient(circle at top right, rgba(42, 10, 50, 0.92) 0%, rgba(8, 2, 20, 0.96) 60%, rgba(32, 5, 12, 0.94) 100%);
+    box-shadow: 
+      0 20px 50px rgba(0, 0, 0, 0.9),
+      0 0 25px rgba(220, 20, 60, 0.4),
+      inset 0 0 20px rgba(138, 43, 226, 0.2);
+  }
+
+  .temple-info-drawer.ophiuchus-active .temple-number {
+    color: var(--cosmic-crimson-light);
+    text-shadow: 0 0 8px rgba(220, 20, 60, 0.4);
+  }
+
+  .temple-info-drawer.ophiuchus-active .gold-text-gradient {
+    background: linear-gradient(135deg, #ff99aa 0%, var(--cosmic-crimson-light) 50%, var(--cosmic-crimson) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: var(--cosmic-crimson-light);
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5), 0 0 10px rgba(220, 20, 60, 0.3);
+  }
+
+  .temple-info-drawer.ophiuchus-active .guardian-brief img {
+    border-color: var(--cosmic-crimson);
+    box-shadow: 0 0 12px rgba(220, 20, 60, 0.5);
+  }
+
+  .temple-info-drawer.ophiuchus-active .guardian-brief strong {
+    color: var(--cosmic-crimson-light);
+  }
+
+  .temple-info-drawer.ophiuchus-active #close-drawer:hover {
+    color: var(--cosmic-crimson-light);
+  }
+
   @keyframes pulseNode {
     0% { transform: scale(1); opacity: 1; }
     100% { transform: scale(1.6); opacity: 0; }
@@ -392,26 +534,43 @@ const templeCoordinates = [
       animation: fadeIn 0.4s ease-out forwards;
     }
   }
+
+  @media (max-width: 640px) {
+    .temple-node {
+      width: 38px;
+      height: 38px;
+      font-size: 0.8rem;
+    }
+    .temple-node-label {
+      top: 44px;
+      font-size: 0.65rem;
+      padding: 0.15rem 0.35rem;
+    }
+    .ophiuchus-node:hover .temple-node-label {
+      box-shadow: 0 0 10px rgba(220, 20, 60, 0.2);
+    }
+  }
 </style>
 
 <script>
   import { goldSaints } from '../data/saintsData.js';
 
-  const romanNumerals = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII'];
+  const templeLabels = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'Ofiuco', 'IX', 'X', 'XI', 'XII'];
 
   const templeLores = [
-    "La entrada al Santuario. Aquí, el sabio Mu repara las Armaduras de Bronce dañadas de Seiya y sus amigos, enseñándoles la importancia del Séptimo Sentido antes de dejarlos pasar de manera pacífica.",
-    "El primer combate real de las Doce Casas. El gigante Aldebarán bloquea el paso de los santos de bronce. Seiya logra cortar un cuerno del casco dorado de Aldebarán, ganándose su respeto y el derecho de avanzar.",
-    "Un templo laberíntico dominado por ilusiones espaciales. Saga de Géminis controla la armadura vacía a distancia desde el templo del Papa. Shun logra romper la ilusión con su Cadena de Andrómeda.",
-    "El templo del horror, plagado con los rostros de las almas de las víctimas de Máscara de Muerte. Shiryū de Dragón combate al guardián y lo derrota tras ser transportado al Yomotsu Hirasaka.",
-    "Aiolia combate bajo el influjo del control mental del Patriarca (el Satanás Imperial). Cassios se sacrifica para romper el hechizo, permitiendo que Aiolia recupere la razón tras presenciar la muerte de un inocente.",
-    "El templo donde reside Shaka. Seiya, Shiryū y Shun son derrotados fácilmente. Ikki de Fénix llega para entablar un duelo brutal, sacrificando sus propios sentidos para despertar su cosmos máximo y derrotar a Shaka.",
-    "Un templo desierto custodiado espiritualmente por Dohko (el Viejo Maestro de Rozan). Los caballeros de bronce encuentran a Hyōga congelado en el ataúd de Camus. Usan la Espada de Libra de Dohko para liberarlo.",
-    "Milo de Escorpio defiende su templo con la Aguja Escarlata. Hyōga se enfrenta a él en una batalla sangrienta. Tras ver la determinación de Cisne, Milo detiene la hemorragia de Hyōga y le permite seguir adelante.",
-    "El templo del héroe fallecido Aiolos. No hay guardián físico, pero la armadura dispara una flecha que revela la pared secreta con el testamento del caballero: 'A los jóvenes que han venido aquí, les encomiendo la vida de Athena'.",
-    "Shura de Capricornio, poseedor de la espada Excalibur en su brazo derecho, se enfrenta a Shiryū. El Dragón se ve forzado a usar el Último Dragón (un ataque suicida) para ascender al cielo junto a Shura, quien se arrepiente al final.",
-    "Camus de Acuario se enfrenta a su discípulo Hyōga. Camus intenta congelar a Hyōga para protegerlo del combate definitivo, pero Hyōga asimila el Cero Absoluto de su maestro en un duelo épico de Ejecuciones de Aurora.",
-    "El último templo, custodiado por Afrodita, quien sembró un jardín de rosas envenenadas en la escalinata al templo del Papa. Shun derrota a Afrodita con su Tormenta Nebular tras vengar la muerte de su maestro Albiore."
+    "La primera casa del Santuario. Aquí, el sabio Shion recibe a los viajeros temporales Shun y Tenma de Pegaso, reparando sus dañadas armaduras de bronce antes de hacer frente a los espectros invasores.",
+    "El inquebrantable Ox de Tauro defiende el paso. Con su inmenso Gran Cuerno repele a los espectros rasos y libra un salvaje combate de honor físico contra la ferocidad de Suikyō de Garuda.",
+    "La casa laberíntica de la esquizofrenia. Caín de Géminis lucha por el honor de Athena, mientras que su gemelo Abel intenta traicionarla. Ambos intercambian el control corporal frente a Shun y Tenma.",
+    "El excéntrico Deathtoll fabrica ataúdes para canalizar las almas rebeldes. Mantiene un combate tragicómico y cruel contra los invasores utilizando su ataúd mitológico 'Omertà' en la entrada del Yomotsu.",
+    "Kaiser de Leo defiende su casa con la ayuda de sus feroces leones gigantes de oro, Goldie y Blondie. Pone a prueba el espíritu y lealtad de Shun antes de concederle el derecho de paso.",
+    "Shijima, 'el hombre silencioso', resguarda la Casa de Virgo. Crea el Laberinto de los Dioses y sella el templo con las Cuatro Puertas de Buda para salvaguardar a la bebé Athena de la traición del Patriarca.",
+    "El joven Dohko de Libra lucha contra su destino en la séptima casa. Se enfrenta a su querido amigo de la infancia Suikyō, llorando su trágico sacrificio de sangre antes de aliarse con la causa rebelde.",
+    "Écarlate de Escorpio, dotado de invisibilidad tras la picadura de un escorpión cristalino, lucha contra Shiryū de Dragón. Le perdona la vida tras comprobar su convicción al ver la garra del dragón celestial.",
+    "El Templo de Ofiuco emerge desde el inframundo, rompiendo los cimientos del Santuario. Odysseus de Ofiuco resucita y sume a todos los caballeros en una hipnoterapia divina para sanar y juzgar su lealtad.",
+    "Gestalt de Sagitario dispara la Flecha de Quirón. Hyōga de Cisne le demuestra que sus piernas de centauro son una ilusión física nacida de la culpa y el dolor por la pérdida de su amada yegua Tanya.",
+    "Izō de Capricornio, el implacable 'cortador de demonios', pone a prueba el honor de Hyōga con cortes brutales de su espada Excalibur, probando si está dispuesto a morir por defender a Athena.",
+    "Mystoria de Acuario custodia la undécima casa. Pone a prueba la maestría glacial de Hyōga en un duelo épico de Ejecuciones de Aurora, confiándole finalmente el resguardo de la diosa del futuro.",
+    "Cardinale de Piscis bloquea el camino final sembrando un letal jardín de rosas rojas y blancas. Aunque inicialmente sirve al traidor, se redime sacrificando su vida para proteger a Shijima y Athena."
   ];
 
   document.addEventListener('DOMContentLoaded', () => {
@@ -440,6 +599,7 @@ const templeCoordinates = [
     if (closeBtn && drawer) {
       closeBtn.addEventListener('click', () => {
         drawer.classList.add('hide');
+        drawer.classList.remove('ophiuchus-active');
         templeNodes.forEach(n => {
           n.classList.remove('active');
           n.setAttribute('aria-expanded', 'false');
@@ -467,16 +627,28 @@ const templeCoordinates = [
 
       if (drawer) {
         drawer.classList.remove('hide');
+        if (saint.id === 'odysseus') {
+          drawer.classList.add('ophiuchus-active');
+        } else {
+          drawer.classList.remove('ophiuchus-active');
+        }
       }
 
-      if (drawerNumber) drawerNumber.textContent = `Templo ${romanNumerals[index]}`;
+      const label = templeLabels[index];
+      if (drawerNumber) {
+        drawerNumber.textContent = label === 'Ofiuco' ? 'Templo Legendario' : `Templo ${label}`;
+      }
       if (drawerName) drawerName.textContent = saint.temple;
       if (drawerImg) {
         drawerImg.src = saint.image;
         drawerImg.alt = `Retrato del Caballero de Oro ${saint.name}`;
       }
-      if (drawerGuardianName) drawerGuardianName.textContent = saint.name.split(' de ')[0];
-      if (drawerLore) drawerLore.textContent = templeLores[index] || "Custodiado por un Caballero de Oro.";
+      if (drawerGuardianName) {
+        drawerGuardianName.textContent = saint.name.split(' de ')[0];
+      }
+      if (drawerLore) {
+        drawerLore.textContent = templeLores[index] || "Custodiado por un Caballero de Oro del siglo XVIII.";
+      }
 
       if (inspectContainer) {
         inspectContainer.innerHTML = '';
@@ -512,5 +684,12 @@ const templeCoordinates = [
         }, 150);
       }
     }
+
+    // Close drawer on Escape key press (a11y)
+    document.addEventListener('keydown', (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && drawer && !drawer.classList.contains('hide')) {
+        closeBtn?.click();
+      }
+    });
   });
 </script>

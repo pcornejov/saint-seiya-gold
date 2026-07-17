@@ -12,7 +12,12 @@ import { goldSaints } from '../data/saintsData.js';
       <!-- Grid of 12 signs, generated statically by Astro! -->
       <div class="signs-grid" id="signs-selector-grid" role="group" aria-label="Signos del Zodiaco">
         {goldSaints.map((saint) => (
-          <button class="sign-card" data-id={saint.id} aria-label={`Ver detalles del Caballero de ${saint.sign}`} aria-pressed="false">
+          <button 
+            class={`sign-card ${saint.id === 'odysseus' ? 'ophiuchus-card' : ''}`} 
+            data-id={saint.id} 
+            aria-label={`Ver detalles del Caballero de ${saint.sign}`} 
+            aria-pressed="false"
+          >
             <span class="sign-card-symbol" aria-hidden="true">{saint.symbol}</span>
             <span class="sign-card-name">{saint.sign}</span>
           </button>
@@ -44,7 +49,6 @@ import { goldSaints } from '../data/saintsData.js';
                 <div class="bio-item"><strong>Peso:</strong> <span id="bio-weight"></span></div>
                 <div class="bio-item"><strong>Sangre:</strong> <span id="bio-blood"></span></div>
                 <div class="bio-item"><strong>Origen:</strong> <span id="bio-origin"></span></div>
-                <div class="bio-item"><strong>Entrenamiento:</strong> <span id="bio-training"></span></div>
               </div>
             </div>
           </div>
@@ -94,14 +98,17 @@ import { goldSaints } from '../data/saintsData.js';
     align-items: start;
   }
 
-  /* Selector Grid for 12 Signs */
-  .signs-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1rem;
-  }
+    /* Selector Grid for 13 Signs (Flexible Flexbox Layout) */
+    .signs-grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.8rem;
+    }
 
   .sign-card {
+    flex: 0 0 calc(20% - 0.64rem);
+    min-width: 90px;
     aspect-ratio: 1;
     background: radial-gradient(circle at center, rgba(15, 15, 30, 0.6) 0%, rgba(5, 5, 15, 0.8) 100%);
     border: 1px solid rgba(255, 215, 0, 0.12);
@@ -143,6 +150,47 @@ import { goldSaints } from '../data/saintsData.js';
 
   .sign-card:hover::after {
     border-color: rgba(255, 215, 0, 0.25);
+  }
+
+  /* Focus visible state for accessibility */
+  .sign-card:focus-visible {
+    outline: none;
+    border-color: var(--gold-primary);
+    box-shadow: 0 0 0 2px var(--gold-primary), var(--gold-glow-strong);
+    transform: translateY(-5px) scale(1.03);
+    color: var(--gold-light);
+  }
+
+  /* Ophiuchus Card Special Styling */
+  .sign-card.ophiuchus-card {
+    border-color: rgba(220, 20, 60, 0.25);
+    color: #ff99aa;
+  }
+
+  .sign-card.ophiuchus-card::after {
+    border-color: transparent;
+  }
+
+  .sign-card.ophiuchus-card:hover,
+  .sign-card.ophiuchus-card:focus-visible {
+    border-color: #ff3355;
+    color: #ffb3c1;
+    box-shadow: 0 8px 25px rgba(220, 20, 60, 0.25), 0 4px 10px rgba(0, 0, 0, 0.4);
+  }
+
+  .sign-card.ophiuchus-card.active {
+    background: radial-gradient(circle at center, rgba(139, 0, 0, 0.25) 0%, rgba(10, 5, 20, 0.95) 100%);
+    border-color: #dc143c;
+    color: #ff4d6d;
+    box-shadow: 0 10px 30px rgba(220, 20, 60, 0.3), 0 0 15px rgba(220, 20, 60, 0.6);
+  }
+
+  .sign-card.ophiuchus-card.active::after {
+    border-color: #ff6688;
+  }
+
+  .sign-card.ophiuchus-card.active .sign-card-symbol {
+    filter: drop-shadow(0 0 8px rgba(220, 20, 60, 0.7));
   }
 
   .sign-card.active {
@@ -395,6 +443,16 @@ import { goldSaints } from '../data/saintsData.js';
     text-shadow: 0 0 8px rgba(255, 215, 0, 0.2);
   }
 
+  .tab-btn:focus-visible {
+    outline: none;
+    color: var(--gold-primary);
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+  }
+
+  .tab-btn:focus-visible::after {
+    width: 100%;
+  }
+
   .tab-btn.active {
     color: var(--gold-primary);
     text-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
@@ -512,16 +570,19 @@ import { goldSaints } from '../data/saintsData.js';
       grid-template-columns: 1fr;
     }
     
-    .signs-grid {
-      grid-template-columns: repeat(4, 1fr);
+    .sign-card {
+      flex: 0 0 calc(14.28% - 0.7rem);
+      min-width: 80px;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .sign-card {
+      flex: 0 0 calc(20% - 0.64rem);
     }
   }
 
   @media (max-width: 640px) {
-    .signs-grid {
-      grid-template-columns: repeat(3, 1fr);
-    }
-    
     .saint-main-info {
       flex-direction: column;
       text-align: center;
@@ -557,6 +618,20 @@ import { goldSaints } from '../data/saintsData.js';
       width: 80%;
     }
   }
+
+  @media (max-width: 480px) {
+    .sign-card {
+      flex: 0 0 calc(33.33% - 0.55rem);
+      padding: 0.8rem;
+      gap: 6px;
+    }
+    .sign-card-symbol {
+      font-size: 1.5rem;
+    }
+    .sign-card-name {
+      font-size: 0.75rem;
+    }
+  }
 </style>
 
 <script>
@@ -564,10 +639,11 @@ import { goldSaints } from '../data/saintsData.js';
 
   const spanishAttrNames = {
     cosmos: 'Cosmos',
-    fuerza: 'Fuerza',
-    velocidad: 'Velocidad',
-    sabiduria: 'Sabiduría',
-    defensa: 'Defensa'
+    force: 'Fuerza',
+    speed: 'Velocidad',
+    will: 'Determinación',
+    defense: 'Defensa',
+    tactics: 'Táctica'
   };
 
   document.addEventListener('DOMContentLoaded', () => {
@@ -584,7 +660,6 @@ import { goldSaints } from '../data/saintsData.js';
     const bioWeight = document.getElementById('bio-weight');
     const bioBlood = document.getElementById('bio-blood');
     const bioOrigin = document.getElementById('bio-origin');
-    const bioTraining = document.getElementById('bio-training');
     
     const desc = document.getElementById('saint-description');
     const statsBars = document.getElementById('stats-bars');
@@ -625,6 +700,28 @@ import { goldSaints } from '../data/saintsData.js';
       });
     });
 
+    // Keyboard arrow navigation for tabs (a11y)
+    const tabList = document.querySelector('.tabs-header');
+    if (tabList) {
+      tabList.addEventListener('keydown', (e: Event) => {
+        const keyboardEvent = e as KeyboardEvent;
+        if (keyboardEvent.key === 'ArrowRight' || keyboardEvent.key === 'ArrowLeft') {
+          const tabs = Array.from(tabButtons) as HTMLButtonElement[];
+          let index = tabs.indexOf(document.activeElement as HTMLButtonElement);
+          if (index !== -1) {
+            if (keyboardEvent.key === 'ArrowRight') {
+              index = (index + 1) % tabs.length;
+            } else {
+              index = (index - 1 + tabs.length) % tabs.length;
+            }
+            tabs[index].focus();
+            tabs[index].click(); // Automatically switch to tab on focus
+            keyboardEvent.preventDefault();
+          }
+        }
+      });
+    }
+
     function selectSaint(id: string | null) {
       if (!id) return;
       
@@ -660,7 +757,6 @@ import { goldSaints } from '../data/saintsData.js';
       if (bioWeight) bioWeight.textContent = saint.weight;
       if (bioBlood) bioBlood.textContent = saint.bloodType;
       if (bioOrigin) bioOrigin.textContent = saint.nationality;
-      if (bioTraining) bioTraining.textContent = saint.trainingPlace;
       
       if (desc) desc.textContent = saint.description;
 

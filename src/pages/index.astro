@@ -6,20 +6,20 @@ import SanctuaryPath from '../components/SanctuaryPath.astro';
 import CosmosQuiz from '../components/CosmosQuiz.astro';
 ---
 
-<Layout title="Saint Seiya: Caballeros de Oro | Códice y Doce Casas">
+<Layout title="Saint Seiya: Next Dimension | Códice y Guerra Santa del Siglo XVIII">
   <main id="main-content">
     <!-- Hero Section -->
     <section id="hero-section">
       <div class="container hero-content">
         <div class="hero-text glass-panel">
-          <h1 class="gold-text-gradient">El Poder del Cosmos Dorado</h1>
-          <p class="hero-subtitle">Custodios del Santuario de Atena y dueños del Séptimo Sentido</p>
+          <h1 class="gold-text-gradient">El Portal del Espacio-Tiempo</h1>
+          <p class="hero-subtitle">Guerra Santa del Siglo XVIII y el Decimotercer Caballero de Oro</p>
           <p class="hero-desc">
-            Adéntrate en la senda celestial de los doce protectores zodiacales. Explora sus técnicas legendarias, asciende las doce escalinatas del Santuario y despierta el Cosmos divino que reside en tu interior.
+            Viaja en el tiempo a través del portal de Chronos hacia el pasado mitológico del Santuario. Devela las identidades de los trece guardianes zodiacales, desafía la hipnosis de Ofiuco y despierta tu propio Cosmos sagrado.
           </p>
           <div class="hero-buttons">
-            <a href="#codex-section" class="btn-gold" id="hero-btn-codex">Ver Caballeros</a>
-            <a href="#sanctuary-section" class="btn-gold" id="hero-btn-sanctuary">Subir el Templo</a>
+            <a href="#codex-section" class="btn-gold" id="hero-btn-codex">Códice de Oro</a>
+            <a href="#sanctuary-section" class="btn-gold" id="hero-btn-sanctuary">Subir el Santuario</a>
           </div>
         </div>
         <div class="hero-zodiac-wheel">
@@ -100,19 +100,41 @@ import CosmosQuiz from '../components/CosmosQuiz.astro';
     position: relative;
   }
 
+  .hero-zodiac-wheel::before {
+    content: '';
+    position: absolute;
+    width: 440px;
+    height: 440px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(138, 43, 226, 0.28) 0%, rgba(220, 20, 60, 0.16) 45%, rgba(0, 0, 0, 0) 70%);
+    filter: blur(20px);
+    z-index: 0;
+    animation: pulsePortal 6s infinite ease-in-out;
+    pointer-events: none;
+  }
+
+  @keyframes pulsePortal {
+    0%, 100% { transform: scale(0.92); opacity: 0.75; }
+    50% { transform: scale(1.08); opacity: 1; }
+  }
+
   .zodiac-circle {
     width: 380px;
     height: 380px;
     border-radius: 50%;
-    border: 2px dashed rgba(255, 215, 0, 0.25);
+    border: 2px dashed rgba(255, 215, 0, 0.35);
     display: flex;
     justify-content: center;
     align-items: center;
     position: relative;
     animation: rotateWheel 90s infinite linear;
+    background: radial-gradient(circle, rgba(12, 6, 28, 0.7) 0%, rgba(4, 4, 12, 0.85) 100%);
     box-shadow: 
-      0 0 50px rgba(0, 0, 0, 0.6), 
-      inset 0 0 40px rgba(255, 215, 0, 0.06);
+      0 0 50px rgba(138, 43, 226, 0.35),
+      0 0 30px rgba(220, 20, 60, 0.2),
+      inset 0 0 40px rgba(255, 215, 0, 0.08);
+    z-index: 1;
+    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   .zodiac-circle::before {
@@ -123,8 +145,12 @@ import CosmosQuiz from '../components/CosmosQuiz.astro';
     right: -15px;
     bottom: -15px;
     border-radius: 50%;
-    border: 1px solid rgba(255, 215, 0, 0.15);
-    box-shadow: 0 0 15px rgba(255, 215, 0, 0.03);
+    border: 1.5px solid rgba(255, 215, 0, 0.25);
+    box-shadow: 
+      0 0 30px rgba(138, 43, 226, 0.35), 
+      0 0 15px rgba(255, 215, 0, 0.15);
+    animation: rotateWheel 60s infinite linear reverse;
+    pointer-events: none;
   }
 
   .zodiac-circle::after {
@@ -135,8 +161,19 @@ import CosmosQuiz from '../components/CosmosQuiz.astro';
     right: 15px;
     bottom: 15px;
     border-radius: 50%;
-    border: 1.5px dashed rgba(255, 215, 0, 0.1);
+    border: 1.5px dashed rgba(220, 20, 60, 0.25);
+    box-shadow: inset 0 0 20px rgba(220, 20, 60, 0.1);
     animation: rotateWheel 40s infinite linear reverse;
+    pointer-events: none;
+  }
+
+  .zodiac-circle:hover {
+    border-color: rgba(255, 215, 0, 0.65);
+    box-shadow: 
+      0 0 60px rgba(138, 43, 226, 0.5),
+      0 0 40px rgba(220, 20, 60, 0.35),
+      inset 0 0 50px rgba(255, 215, 0, 0.15);
+    animation-duration: 45s; /* Speed up portal rotation on hover */
   }
 
   .zodiac-center {
@@ -144,19 +181,24 @@ import CosmosQuiz from '../components/CosmosQuiz.astro';
     height: 140px;
     border-radius: 50%;
     border: 2px solid var(--gold-secondary);
-    background: radial-gradient(circle, rgba(184, 134, 11, 0.35) 0%, rgba(2, 2, 8, 0.9) 100%);
-    box-shadow: var(--gold-glow);
+    background: radial-gradient(circle, rgba(138, 43, 226, 0.45) 0%, rgba(220, 20, 60, 0.3) 50%, rgba(2, 2, 8, 0.95) 100%);
+    box-shadow: 
+      var(--gold-glow),
+      0 0 20px rgba(138, 43, 226, 0.3);
     display: flex;
     justify-content: center;
     align-items: center;
     z-index: 2;
-    transition: all 0.5s ease;
+    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   .zodiac-center:hover {
     border-color: var(--gold-primary);
-    box-shadow: var(--gold-glow-strong);
-    transform: scale(1.05);
+    box-shadow: 
+      var(--gold-glow-strong),
+      0 0 35px rgba(138, 43, 226, 0.5),
+      0 0 25px rgba(220, 20, 60, 0.4);
+    transform: scale(1.08);
   }
 
   .gold-seal {
@@ -167,11 +209,6 @@ import CosmosQuiz from '../components/CosmosQuiz.astro';
     background-repeat: no-repeat;
     background-position: center;
     opacity: 0.8;
-  }
-
-  @keyframes rotateWheel {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
   }
 
   /* Responsive adjust */

@@ -4,14 +4,14 @@
 
 <section id="quiz-section">
   <div class="container">
-    <h2 class="section-title gold-text-gradient">Prueba del Cosmos</h2>
+    <h2 class="section-title gold-text-gradient">Alineación de Cosmos</h2>
     
     <div class="quiz-box glass-panel" id="quiz-container">
       <!-- Start Screen -->
       <div class="quiz-screen active" id="quiz-start-screen">
         <div class="quiz-ritual-circle">🪐</div>
-        <h3>¿Qué Caballero Dorado es tu reflejo en el Zodiaco?</h3>
-        <p>El Cosmos no es solo fuerza, es intelecto, templanza, pasión y fe. Responde con sinceridad este ritual de preguntas y sintoniza tu energía con uno de los 12 guardianes dorados.</p>
+        <h3>¿Qué Caballero de Oro del Siglo XVIII resuena en tu Cosmos?</h3>
+        <p>El portal de Chronos ha distorsionado el espacio-tiempo. Responde con la verdad moral de tu espíritu y descubre a qué guardián de la Guerra Santa del pasado estás alineado dimensionalmente.</p>
         <button class="btn-gold" id="start-quiz-btn">Comenzar Ritual</button>
       </div>
 
@@ -29,12 +29,18 @@
 
       <!-- Results Screen -->
       <div class="quiz-screen" id="quiz-results-screen" tabindex="-1" style="outline: none;">
-        <div class="result-celebration">✨ TU ALINEACIÓN CÓSMICA ✨</div>
+        <div class="result-celebration">✨ TU ALINEACIÓN CÓSMICA DIMENSIONAL ✨</div>
         <div class="result-card-glow"></div>
         <div class="result-card" id="result-shareable-card">
+          <!-- Collectible Card Details -->
+          <div class="card-corner top-left"></div>
+          <div class="card-corner top-right"></div>
+          <div class="card-corner bottom-left"></div>
+          <div class="card-corner bottom-right"></div>
+          
           <div class="result-card-inner">
             <div class="result-header">
-              <span class="result-badge">Caballero del Zodiaco</span>
+              <span class="result-badge">Caballero de Oro (Siglo XVIII)</span>
               <h3 id="result-saint-name" class="gold-text-gradient"></h3>
               <p id="result-saint-title"></p>
             </div>
@@ -52,7 +58,8 @@
         </div>
 
         <div class="result-actions">
-          <button class="btn-gold" id="restart-quiz-btn">Volver a Intentar</button>
+          <button class="btn-gold" id="view-in-codex-btn">Ver en el Códice</button>
+          <button class="btn-gold" id="restart-quiz-btn" style="background: rgba(255, 255, 255, 0.05); border-color: rgba(255, 255, 255, 0.2); text-shadow: none;">Volver a Intentar</button>
         </div>
       </div>
     </div>
@@ -150,6 +157,7 @@
     margin-bottom: 2rem;
     font-size: 1.5rem !important;
     color: var(--text-primary) !important;
+    transition: opacity 0.25s ease, transform 0.25s ease;
   }
 
   .quiz-options {
@@ -158,6 +166,13 @@
     gap: 1rem;
     width: 100%;
     max-width: 500px;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+  }
+
+  .quiz-question.fade-out,
+  .quiz-options.fade-out {
+    opacity: 0;
+    transform: translateY(-8px);
   }
 
   :global(.option-btn) {
@@ -191,7 +206,8 @@
     transition: transform 0.3s ease;
   }
 
-  :global(.option-btn:hover) {
+  :global(.option-btn:hover),
+  :global(.option-btn:focus-visible) {
     background: rgba(255, 215, 0, 0.04);
     border-color: rgba(255, 215, 0, 0.4);
     color: #fff;
@@ -199,9 +215,11 @@
     box-shadow: 
       0 6px 15px rgba(0, 0, 0, 0.3),
       0 0 15px rgba(255, 215, 0, 0.05);
+    outline: none;
   }
 
-  :global(.option-btn:hover::before) {
+  :global(.option-btn:hover::before),
+  :global(.option-btn:focus-visible::before) {
     transform: scaleY(1);
   }
 
@@ -237,44 +255,122 @@
   .result-card {
     width: 100%;
     max-width: 480px;
-    background: radial-gradient(circle at top left, rgba(20, 20, 45, 0.95) 0%, rgba(5, 5, 15, 0.95) 100%);
-    border: 2px solid var(--gold-primary);
-    border-radius: 20px;
+    background: radial-gradient(circle at top right, rgba(32, 12, 54, 0.95) 0%, rgba(6, 3, 16, 0.98) 50%, rgba(48, 6, 22, 0.95) 100%);
+    border: 2px solid rgba(255, 215, 0, 0.7);
+    border-radius: 22px;
     box-shadow: 
-      0 20px 50px rgba(0, 0, 0, 0.7),
-      0 0 30px rgba(255, 215, 0, 0.25);
-    padding: 2.2rem;
+      0 25px 60px rgba(0, 0, 0, 0.85),
+      0 0 35px rgba(255, 215, 0, 0.3),
+      0 0 45px rgba(138, 43, 226, 0.25),
+      inset 0 0 20px rgba(255, 255, 255, 0.04);
+    padding: 2.5rem 2.2rem;
     margin-bottom: 2.5rem;
     position: relative;
     overflow: hidden;
     text-align: left;
     transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 1;
   }
 
+  /* Holographic Foil overlay */
   .result-card::before {
     content: '';
     position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
+    top: 0; left: 0; right: 0; bottom: 0;
     background: linear-gradient(
-      45deg, 
-      transparent 45%, 
-      rgba(255, 255, 255, 0.1) 48%, 
-      rgba(255, 215, 0, 0.2) 50%, 
-      rgba(255, 255, 255, 0.1) 52%, 
-      transparent 55%
+      115deg,
+      transparent 0%,
+      rgba(255, 255, 255, 0.02) 20%,
+      rgba(138, 43, 226, 0.16) 35%,
+      rgba(220, 20, 60, 0.18) 45%,
+      rgba(255, 215, 0, 0.16) 55%,
+      rgba(0, 255, 255, 0.12) 65%,
+      rgba(255, 255, 255, 0.02) 80%,
+      transparent 100%
     );
-    transform: rotate(45deg);
-    animation: shineReflect 8s infinite linear;
+    background-size: 250% 250%;
+    background-position: 0% 50%;
+    mix-blend-mode: color-dodge;
+    opacity: 0.85;
     pointer-events: none;
+    z-index: 4;
+    animation: holoShimmer 9s infinite linear alternate;
+    transition: all 0.5s ease;
+  }
+
+  @keyframes holoShimmer {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  .result-card:hover {
+    transform: translateY(-8px) rotate(1.5deg) scale(1.02);
+    border-color: var(--gold-light);
+    box-shadow: 
+      0 35px 80px rgba(0, 0, 0, 0.9),
+      0 0 50px rgba(255, 215, 0, 0.55),
+      0 0 40px rgba(138, 43, 226, 0.45),
+      0 0 30px rgba(220, 20, 60, 0.35);
+  }
+
+  .result-card:hover::before {
+    opacity: 1;
+    animation-duration: 4.5s;
+  }
+
+  /* Card corner brackets */
+  .card-corner {
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    border: 2px solid var(--gold-secondary);
+    pointer-events: none;
+    z-index: 5;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .top-left {
+    top: 12px;
+    left: 12px;
+    border-right: none;
+    border-bottom: none;
+  }
+
+  .top-right {
+    top: 12px;
+    right: 12px;
+    border-left: none;
+    border-bottom: none;
+  }
+
+  .bottom-left {
+    bottom: 12px;
+    left: 12px;
+    border-right: none;
+    border-top: none;
+  }
+
+  .bottom-right {
+    bottom: 12px;
+    right: 12px;
+    border-left: none;
+    border-top: none;
+  }
+
+  .result-card:hover .card-corner {
+    border-color: var(--gold-primary);
+    width: 18px;
+    height: 18px;
+    filter: drop-shadow(0 0 3px rgba(255, 215, 0, 0.5));
   }
 
   .result-header {
     border-bottom: 1px solid rgba(255, 215, 0, 0.15);
     padding-bottom: 1rem;
     margin-bottom: 1.2rem;
+    position: relative;
+    z-index: 2;
   }
 
   .result-badge {
@@ -283,8 +379,13 @@
     color: var(--gold-light);
     letter-spacing: 2px;
     font-weight: 700;
-    display: block;
-    margin-bottom: 0.2rem;
+    display: inline-block;
+    margin-bottom: 0.4rem;
+    background: rgba(138, 43, 226, 0.25);
+    border: 1px solid rgba(138, 43, 226, 0.45);
+    padding: 0.2rem 0.6rem;
+    border-radius: 4px;
+    text-shadow: 0 0 5px rgba(138, 43, 226, 0.5);
   }
 
   .result-header h3 {
@@ -303,6 +404,8 @@
     display: flex;
     gap: 1.5rem;
     align-items: center;
+    position: relative;
+    z-index: 2;
   }
 
   #result-saint-portrait {
@@ -321,7 +424,7 @@
   .result-card:hover #result-saint-portrait {
     border-color: var(--gold-primary);
     transform: scale(1.05);
-    box-shadow: var(--gold-glow);
+    box-shadow: var(--gold-glow), 0 6px 20px rgba(0, 0, 0, 0.6);
   }
 
   .result-text-block {
@@ -353,11 +456,20 @@
     border-radius: 4px;
     font-weight: 600;
     letter-spacing: 0.5px;
+    transition: all 0.3s ease;
+  }
+
+  .trait-tag:hover {
+    background: rgba(255, 215, 0, 0.18);
+    border-color: var(--gold-primary);
+    box-shadow: var(--gold-glow);
+    color: #fff;
   }
 
   .result-actions {
     display: flex;
     gap: 1rem;
+    z-index: 2;
   }
 
   @media (max-width: 580px) {
@@ -375,6 +487,16 @@
       justify-content: center;
     }
   }
+
+  @media (max-width: 480px) {
+    .result-actions {
+      flex-direction: column;
+      width: 100%;
+    }
+    .result-actions .btn-gold {
+      width: 100%;
+    }
+  }
 </style>
 
 <script>
@@ -382,65 +504,66 @@
 
   const quizQuestions = [
     {
-      question: "Frente a un gran dilema moral o peligro inminente, ¿cuál es tu primera reacción?",
+      question: "Ante una distorsión en el espacio-tiempo que amenaza el futuro de Athena, ¿cuál es tu reacción?",
       options: [
-        { text: "Analizar con paciencia y buscar restaurar el equilibrio de forma pacífica.", weights: { mu: 3, dohko: 2, shaka: 2 } },
-        { text: "Enfrentarlo de frente con toda mi fuerza física y valor inquebrantable.", weights: { aldebaran: 3, aiolia: 3, milo: 2 } },
-        { text: "Actuar con fría lógica, reprimiendo cualquier emoción para ejecutar el deber.", weights: { camus: 3, shura: 3, shaka: 1 } },
-        { text: "Hacer lo que sea necesario para imponer el orden, sin importar la moralidad de los medios.", weights: { saga: 3, deathmask: 3, aphrodite: 2 } }
+        { text: "Cruzar el portal de inmediato sin medir consecuencias para luchar en el pasado.", weights: { dohko: 3, shion: 2, kaiser: 1 } },
+        { text: "Esperar en mi templo resguardando mi época y cumpliendo mi deber absoluto.", weights: { ox: 3, izo: 3, mystoria: 2 } },
+        { text: "Analizar la anomalía astral con mi mente espiritual e intentar meditar en ella.", weights: { shijima: 3, odysseus: 2, cain: 1 } },
+        { text: "Aprovechar la confusión temporal para negociar o jugar con ambas facciones.", weights: { deathtoll: 3, cardinale: 2 } }
       ]
     },
     {
-      question: "¿Qué tipo de destreza cósmica crees que encaja mejor con tu espíritu?",
+      question: "Si tu mentor o tu mejor amigo regresa vistiendo el manto del enemigo (los espectros), ¿cómo procedes?",
       options: [
-        { text: "Barreras defensivas impenetrables y teletransportación psíquica.", weights: { mu: 3, shaka: 2, dohko: 1 } },
-        { text: "Impactos colosales y ráfagas físicas directas a la velocidad de la luz.", weights: { aiolia: 3, aldebaran: 2, aiolos: 3 } },
-        { text: "Manipulación de temperaturas gélidas o del espacio y dimensiones.", weights: { camus: 3, saga: 3, shura: 1 } },
-        { text: "Técnicas sutiles ligadas a espíritus, picaduras venenosas o flores letales.", weights: { deathmask: 3, milo: 3, aphrodite: 3 } }
+        { text: "Lo enfrento a regañadientes, llorando su traición pero cumpliendo con mi orden.", weights: { dohko: 3, shion: 3 } },
+        { text: "Bloqueo su paso con la intención firme de ejecutarlo con golpes absolutos.", weights: { ox: 3, izo: 3, mystoria: 2 } },
+        { text: "Intento salvar su espíritu y juzgar sus intenciones reales con mi cosmos.", weights: { odysseus: 3, shijima: 2 } },
+        { text: "Le tiendo una trampa mortal en mi templo utilizando ataúdes o ilusiones.", weights: { deathtoll: 3, cain: 2, cardinale: 2 } }
       ]
     },
     {
-      question: "¿Cuál consideras que es tu mayor fortaleza interna?",
+      question: "Si padecieras una extraña condición física o una ilusión psíquica que altere tu ser, ¿cómo actuarías?",
       options: [
-        { text: "La sabiduría espiritual y la capacidad de meditación profunda.", weights: { shaka: 3, dohko: 3, mu: 2 } },
-        { text: "La lealtad ciega y el honor hacia mis ideales y mis mentores.", weights: { aiolos: 3, shura: 3, aiolia: 2 } },
-        { text: "La nobleza, camaradería y protección hacia los más vulnerables.", weights: { aldebaran: 3, milo: 3, dohko: 1 } },
-        { text: "La ambición inquebrantable y el impulso constante de superación.", weights: { saga: 3, deathmask: 2, aphrodite: 2 } }
+        { text: "Usaría mi invisibilidad y picaduras de veneno para atacar sigilosamente.", weights: { ecarlate: 3 } },
+        { text: "Me aferraría a la ilusión trágica por amor al pasado, aunque me ciegue.", weights: { gestalt: 3 } },
+        { text: "Lucharía internamente para mantener a raya mi mitad maligna devoradora.", weights: { cain: 3 } },
+        { text: "Buscaría la ayuda de un dios sanador a quien le deba mi vida.", weights: { odysseus: 3, ecarlate: 2, gestalt: 2 } }
       ]
     },
     {
-      question: "¿Qué entorno sintoniza mejor con tu paz mental?",
+      question: "¿Cuál es tu postura ante el regreso de Odysseus de Ofiuco y su rebelión divina?",
       options: [
-        { text: "Un templo sereno rodeado de cascadas eternas o lagos sagrados.", weights: { dohko: 3, shaka: 3, mu: 1 } },
-        { text: "Una planicie expuesta a tormentas eléctricas y lluvias estelares.", weights: { aiolia: 3, aiolos: 3, mu: 2 } },
-        { text: "Un desierto congelado y montañoso cubierto por nieve perpetua.", weights: { camus: 3, shura: 2, aldebaran: 1 } },
-        { text: "Un jardín de rosas majestuosas o una dimensión de portales estrellados.", weights: { aphrodite: 3, saga: 3, deathmask: 2, milo: 1 } }
+        { text: "Le debo la vida y mi salud; me debato entre mi deber y mi enorme deuda.", weights: { ecarlate: 3, gestalt: 3, cardinale: 2 } },
+        { text: "Mi lealtad a Athena es inmutable; desenvaino mi espada para combatirlo.", weights: { izo: 3, ox: 2, kaiser: 2 } },
+        { text: "Adormezco mis dudas y me entrego a su hipnoterapia divina para descansar.", weights: { odysseus: 3, mystoria: 2 } },
+        { text: "Intento descifrar su cosmos espiritual antes de tomar partido a la fuerza.", weights: { shijima: 3, shion: 2, cain: 2 } }
       ]
     },
     {
-      question: "Para ti, ¿qué representa la energía del Cosmos?",
+      question: "¿Cuál es tu estilo de combate o técnica espiritual predilecta?",
       options: [
-        { text: "La armonía universal y la comunión con el Todo celestial.", weights: { shaka: 3, mu: 2, dohko: 3 } },
-        { text: "Un fuego interior latente que estalla con fuerza ante la injusticia.", weights: { aiolia: 3, aldebaran: 2, milo: 3 } },
-        { text: "Una fuerza de voluntad pura, afilada como el acero de una espada.", weights: { shura: 3, aiolos: 2, camus: 1 } },
-        { text: "Una fuerza dual de luz y oscuridad capaz de colapsar galaxias.", weights: { saga: 3, camus: 2, deathmask: 2, aphrodite: 2 } }
+        { text: "Un filo invisible en mi brazo capaz de rebanar el espacio mismo.", weights: { izo: 3 } },
+        { text: "Ráfagas glaciales cercanas al cero absoluto o soplos destructivos.", weights: { mystoria: 3, ox: 2, kaiser: 2 } },
+        { text: "Rosas envenenadas de distintos colores o un ataúd sella-almas.", weights: { cardinale: 3, deathtoll: 3 } },
+        { text: "Sabiduría budista, barreras inquebrantables o hipnosis medicinal sagrada.", weights: { shijima: 3, odysseus: 3, dohko: 1 } }
       ]
     }
   ];
 
   const saintTraits: Record<string, string[]> = {
-    mu: ["Muro de Cristal", "Sabiduría Estelar"],
-    aldebaran: ["Gran Cuerno", "Nobleza del Toro"],
-    saga: ["Explosión Galáctica", "Alma Dual"],
-    deathmask: ["Paso al Inframundo", "Llamas Espirituales"],
-    aiolia: ["Plasma Relámpago", "Furia Dorada"],
-    shaka: ["Tesoro del Cielo", "Meditación Budista"],
-    dohko: ["Cien Dragones", "Armas Legendarias"],
-    milo: ["Aguja Escarlata", "Orgullo Letal"],
-    aiolos: ["Flecha de la Justicia", "Testamento Sagrado"],
-    shura: ["Corte Excalibur", "Disciplina Estricta"],
-    camus: ["Cero Absoluto", "Frío Imperturbable"],
-    aphrodite: ["Rosas Demoníacas", "Muerte Hermosa"]
+    shion: ["Muro de Cristal", "Revolución Estelar"],
+    ox: ["Gran Cuerno", "Fuerza Devota"],
+    cain: ["Explosión Galáctica", "Alma Dual"],
+    deathtoll: ["Ataúd Omertà", "Ondas del Inframundo"],
+    kaiser: ["Plasma Relámpago", "Leones Guardianes"],
+    shijima: ["Cuatro Puertas de Buda", "Doncella Silenciosa"],
+    dohko: ["Cien Dragones", "Juventud Impetuosa"],
+    ecarlate: ["Aguja Escarlata", "Picadura Invisible"],
+    odysseus: ["Cosmos Médico", "Hipnoterapia Divina"],
+    gestalt: ["Flecha de Quirón", "Ilusión del Centauro"],
+    izo: ["Corte Excalibur", "Filo Recto"],
+    mystoria: ["Cero Absoluto", "Ráfaga Glacial"],
+    cardinale: ["Rosas Daga", "Belleza Sangrienta"]
   };
 
   document.addEventListener('DOMContentLoaded', () => {
@@ -450,6 +573,7 @@
     
     const startBtn = document.getElementById('start-quiz-btn');
     const restartBtn = document.getElementById('restart-quiz-btn');
+    const viewInCodexBtn = document.getElementById('view-in-codex-btn');
     
     const progressContainer = document.getElementById('quiz-progress-bar-container');
     const progressFill = document.getElementById('quiz-progress-fill');
@@ -466,13 +590,14 @@
 
     let currentQuestionIndex = 0;
     let scores: Record<string, number> = {};
+    let winnerId = 'shion';
 
     function resetQuiz() {
       currentQuestionIndex = 0;
       scores = {
-        mu: 0, aldebaran: 0, saga: 0, deathmask: 0, aiolia: 0,
-        shaka: 0, dohko: 0, milo: 0, aiolos: 0, shura: 0,
-        camus: 0, aphrodite: 0
+        shion: 0, ox: 0, cain: 0, deathtoll: 0, kaiser: 0,
+        shijima: 0, dohko: 0, ecarlate: 0, odysseus: 0, gestalt: 0,
+        izo: 0, mystoria: 0, cardinale: 0
       };
       if (progressContainer) {
         progressContainer.setAttribute('aria-valuenow', '0');
@@ -495,6 +620,22 @@
         setTimeout(() => {
           startBtn?.focus();
         }, 100);
+      });
+    }
+
+    if (viewInCodexBtn) {
+      viewInCodexBtn.addEventListener('click', () => {
+        // Scroll to codex
+        const codexSec = document.getElementById('codex-section');
+        if (codexSec) {
+          codexSec.scrollIntoView({ behavior: 'smooth' });
+        }
+        // Select matching saint
+        setTimeout(() => {
+          if ((window as any).selectSaintInCodex) {
+            (window as any).selectSaintInCodex(winnerId);
+          }
+        }, 500);
       });
     }
 
@@ -537,10 +678,22 @@
               scores[saintId] = (scores[saintId] || 0) + (opt.weights as any)[saintId];
             });
 
+            // Fade out current question & options
+            if (questionText && optionsContainer) {
+              questionText.classList.add('fade-out');
+              optionsContainer.classList.add('fade-out');
+            }
+
             setTimeout(() => {
               currentQuestionIndex++;
               showQuestion();
-            }, 300);
+              
+              // Fade back in
+              if (questionText && optionsContainer) {
+                questionText.classList.remove('fade-out');
+                optionsContainer.classList.remove('fade-out');
+              }
+            }, 250);
           });
 
           optionsContainer.appendChild(btn);
@@ -552,7 +705,6 @@
       if (progressFill) progressFill.style.width = "100%";
       if (progressContainer) progressContainer.setAttribute('aria-valuenow', "100");
       
-      let winnerId = 'mu';
       let highestScore = -1;
 
       Object.keys(scores).forEach(id => {
@@ -571,7 +723,7 @@
         resultPortrait.src = saint.image;
         resultPortrait.alt = `Retrato del Caballero de Oro ${saint.name}`;
       }
-      if (resultDesc) resultDesc.textContent = `Tu cosmos está firmemente alineado con ${saint.name}. ${saint.description}`;
+      if (resultDesc) resultDesc.textContent = `Tu cosmos dimensional está firmemente alineado con ${saint.name}. ${saint.description}`;
 
       const traits = saintTraits[winnerId] || ["Cosmos Dorado", "Séptimo Sentido"];
       if (trait1) trait1.textContent = traits[0];
