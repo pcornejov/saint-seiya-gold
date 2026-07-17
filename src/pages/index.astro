@@ -7,7 +7,7 @@ import CosmosQuiz from '../components/CosmosQuiz.astro';
 ---
 
 <Layout title="Saint Seiya: Caballeros de Oro | Códice y Doce Casas">
-  <main>
+  <main id="main-content">
     <!-- Hero Section -->
     <section id="hero-section">
       <div class="container hero-content">
@@ -65,10 +65,11 @@ import CosmosQuiz from '../components/CosmosQuiz.astro';
   }
 
   .hero-text h1 {
-    font-size: 3.5rem;
+    font-size: 3.8rem;
     line-height: 1.15;
     letter-spacing: 2px;
     font-weight: 900;
+    text-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
   }
 
   .hero-subtitle {
@@ -100,44 +101,67 @@ import CosmosQuiz from '../components/CosmosQuiz.astro';
   }
 
   .zodiac-circle {
-    width: 360px;
-    height: 360px;
+    width: 380px;
+    height: 380px;
     border-radius: 50%;
     border: 2px dashed rgba(255, 215, 0, 0.25);
     display: flex;
     justify-content: center;
     align-items: center;
     position: relative;
-    animation: rotateWheel 80s infinite linear;
-    box-shadow: 0 0 40px rgba(0, 0, 0, 0.4), inset 0 0 30px rgba(255, 215, 0, 0.05);
+    animation: rotateWheel 90s infinite linear;
+    box-shadow: 
+      0 0 50px rgba(0, 0, 0, 0.6), 
+      inset 0 0 40px rgba(255, 215, 0, 0.06);
   }
 
   .zodiac-circle::before {
     content: '';
     position: absolute;
-    top: -10px;
-    left: -10px;
-    right: -10px;
-    bottom: -10px;
+    top: -15px;
+    left: -15px;
+    right: -15px;
+    bottom: -15px;
     border-radius: 50%;
     border: 1px solid rgba(255, 215, 0, 0.15);
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.03);
+  }
+
+  .zodiac-circle::after {
+    content: '';
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    right: 15px;
+    bottom: 15px;
+    border-radius: 50%;
+    border: 1.5px dashed rgba(255, 215, 0, 0.1);
+    animation: rotateWheel 40s infinite linear reverse;
   }
 
   .zodiac-center {
-    width: 120px;
-    height: 120px;
+    width: 140px;
+    height: 140px;
     border-radius: 50%;
     border: 2px solid var(--gold-secondary);
-    background: radial-gradient(circle, rgba(184, 134, 11, 0.3) 0%, rgba(2, 2, 8, 0.8) 100%);
+    background: radial-gradient(circle, rgba(184, 134, 11, 0.35) 0%, rgba(2, 2, 8, 0.9) 100%);
     box-shadow: var(--gold-glow);
     display: flex;
     justify-content: center;
     align-items: center;
+    z-index: 2;
+    transition: all 0.5s ease;
+  }
+
+  .zodiac-center:hover {
+    border-color: var(--gold-primary);
+    box-shadow: var(--gold-glow-strong);
+    transform: scale(1.05);
   }
 
   .gold-seal {
-    width: 70px;
-    height: 70px;
+    width: 80px;
+    height: 80px;
     background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23FFD700"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>');
     background-size: contain;
     background-repeat: no-repeat;

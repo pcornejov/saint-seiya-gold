@@ -17,18 +17,18 @@
 
       <!-- Question Screen -->
       <div class="quiz-screen" id="quiz-question-screen">
-        <div class="quiz-progress-bar">
+        <div class="quiz-progress-bar" id="quiz-progress-bar-container" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="Progreso de la prueba">
           <div class="progress-fill" id="quiz-progress-fill"></div>
         </div>
         <span class="quiz-counter" id="quiz-counter">Pregunta 1 de 5</span>
-        <h3 class="quiz-question" id="quiz-question-text">¿Cómo reaccionas ante una injusticia extrema?</h3>
-        <div class="quiz-options" id="quiz-options-container">
+        <h3 class="quiz-question" id="quiz-question-text" tabindex="-1" style="outline: none;">¿Cómo reaccionas ante una injusticia extrema?</h3>
+        <div class="quiz-options" id="quiz-options-container" role="radiogroup" aria-label="Opciones de respuesta">
           <!-- Options rendered dynamically -->
         </div>
       </div>
 
       <!-- Results Screen -->
-      <div class="quiz-screen" id="quiz-results-screen">
+      <div class="quiz-screen" id="quiz-results-screen" tabindex="-1" style="outline: none;">
         <div class="result-celebration">✨ TU ALINEACIÓN CÓSMICA ✨</div>
         <div class="result-card-glow"></div>
         <div class="result-card" id="result-shareable-card">
@@ -39,7 +39,7 @@
               <p id="result-saint-title"></p>
             </div>
             <div class="result-body">
-              <img id="result-saint-portrait" src="" alt="Saint Portrait" />
+              <img id="result-saint-portrait" src="" alt="Retrato del Caballero Dorado alineado" />
               <div class="result-text-block">
                 <p id="result-saint-desc"></p>
                 <div class="result-traits">
@@ -88,10 +88,18 @@
 
   /* Start Screen */
   .quiz-ritual-circle {
-    font-size: 5rem;
-    margin-bottom: 1.5rem;
-    animation: float 5s ease-in-out infinite;
-    filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.3));
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    border: 2px dashed rgba(255, 215, 0, 0.4);
+    background: radial-gradient(circle, rgba(184, 134, 11, 0.2) 0%, rgba(2, 2, 8, 0.6) 100%);
+    box-shadow: var(--gold-glow);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 3.5rem;
+    margin: 0 auto 2rem auto;
+    animation: float 4s ease-in-out infinite, rotateWheel 60s infinite linear;
   }
 
   .quiz-screen h3 {
@@ -153,25 +161,48 @@
   }
 
   :global(.option-btn) {
-    background: rgba(255, 255, 255, 0.02);
-    border: 1px solid rgba(255, 215, 0, 0.15);
-    border-radius: 8px;
-    padding: 1.1rem 1.5rem;
+    background: rgba(15, 15, 35, 0.5);
+    border: 1.5px solid rgba(255, 215, 0, 0.15);
+    border-radius: 10px;
+    padding: 1.2rem 1.8rem;
     color: var(--text-secondary);
-    font-size: 0.95rem;
+    font-family: var(--font-sans);
+    font-size: 0.98rem;
+    font-weight: 500;
+    line-height: 1.5;
     text-align: left;
-    transition: all 0.25s ease;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     position: relative;
     overflow: hidden;
     width: 100%;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  }
+
+  :global(.option-btn::before) {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 4px;
+    background: var(--gold-primary);
+    transform: scaleY(0);
+    transition: transform 0.3s ease;
   }
 
   :global(.option-btn:hover) {
-    background: rgba(255, 215, 0, 0.05);
-    border-color: var(--gold-primary);
-    color: var(--gold-light);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 15px rgba(255, 215, 0, 0.08);
+    background: rgba(255, 215, 0, 0.04);
+    border-color: rgba(255, 215, 0, 0.4);
+    color: #fff;
+    transform: translateX(4px);
+    box-shadow: 
+      0 6px 15px rgba(0, 0, 0, 0.3),
+      0 0 15px rgba(255, 215, 0, 0.05);
+  }
+
+  :global(.option-btn:hover::before) {
+    transform: scaleY(1);
   }
 
   :global(.option-btn:active) {
@@ -179,9 +210,17 @@
   }
 
   :global(.option-btn.selected) {
-    background: linear-gradient(90deg, rgba(139, 101, 8, 0.2) 0%, rgba(255, 215, 0, 0.15) 100%);
+    background: radial-gradient(circle at left, rgba(184, 134, 11, 0.2) 0%, rgba(10, 10, 25, 0.8) 100%);
     border-color: var(--gold-primary);
     color: var(--gold-primary);
+    font-weight: 700;
+    box-shadow: var(--gold-glow), 0 6px 20px rgba(0, 0, 0, 0.4);
+    transform: scale(1.01);
+  }
+
+  :global(.option-btn.selected::before) {
+    transform: scaleY(1);
+    background: var(--gold-light);
     box-shadow: var(--gold-glow);
   }
 
@@ -197,29 +236,38 @@
 
   .result-card {
     width: 100%;
-    max-width: 440px;
-    background: rgba(10, 10, 25, 0.85);
-    border: 2px solid var(--gold-secondary);
-    border-radius: 16px;
-    box-shadow: 0 15px 40px rgba(0,0,0,0.6), var(--gold-glow);
-    padding: 2rem;
-    margin-bottom: 2rem;
+    max-width: 480px;
+    background: radial-gradient(circle at top left, rgba(20, 20, 45, 0.95) 0%, rgba(5, 5, 15, 0.95) 100%);
+    border: 2px solid var(--gold-primary);
+    border-radius: 20px;
+    box-shadow: 
+      0 20px 50px rgba(0, 0, 0, 0.7),
+      0 0 30px rgba(255, 215, 0, 0.25);
+    padding: 2.2rem;
+    margin-bottom: 2.5rem;
     position: relative;
     overflow: hidden;
     text-align: left;
-    transition: all 0.5s ease;
+    transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
-  .result-card::after {
+  .result-card::before {
     content: '';
     position: absolute;
     top: -50%;
     left: -50%;
     width: 200%;
     height: 200%;
-    background: linear-gradient(45deg, transparent 45%, rgba(255, 215, 0, 0.1) 50%, transparent 55%);
+    background: linear-gradient(
+      45deg, 
+      transparent 45%, 
+      rgba(255, 255, 255, 0.1) 48%, 
+      rgba(255, 215, 0, 0.2) 50%, 
+      rgba(255, 255, 255, 0.1) 52%, 
+      transparent 55%
+    );
     transform: rotate(45deg);
-    animation: shineReflect 6s infinite linear;
+    animation: shineReflect 8s infinite linear;
     pointer-events: none;
   }
 
@@ -258,14 +306,22 @@
   }
 
   #result-saint-portrait {
-    width: 110px;
-    height: 145px;
+    width: 120px;
+    height: 160px;
     object-fit: cover;
     object-position: top center;
-    border-radius: 6px;
-    border: 1px solid var(--gold-secondary);
+    border-radius: 10px;
+    border: 2px solid var(--gold-secondary);
     background: var(--bg-space-fallback);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
     flex-shrink: 0;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .result-card:hover #result-saint-portrait {
+    border-color: var(--gold-primary);
+    transform: scale(1.05);
+    box-shadow: var(--gold-glow);
   }
 
   .result-text-block {
@@ -277,7 +333,7 @@
     color: var(--text-secondary);
     line-height: 1.5;
     margin-bottom: 1rem;
-    max-height: 90px;
+    max-height: 95px;
     overflow: hidden;
     text-overflow: ellipsis;
   }
@@ -302,11 +358,6 @@
   .result-actions {
     display: flex;
     gap: 1rem;
-  }
-
-  @keyframes shineReflect {
-    0% { transform: translate(-30%, -30%) rotate(45deg); }
-    100% { transform: translate(30%, 30%) rotate(45deg); }
   }
 
   @media (max-width: 580px) {
@@ -400,6 +451,7 @@
     const startBtn = document.getElementById('start-quiz-btn');
     const restartBtn = document.getElementById('restart-quiz-btn');
     
+    const progressContainer = document.getElementById('quiz-progress-bar-container');
     const progressFill = document.getElementById('quiz-progress-fill');
     const counterText = document.getElementById('quiz-counter');
     const questionText = document.getElementById('quiz-question-text');
@@ -422,6 +474,9 @@
         shaka: 0, dohko: 0, milo: 0, aiolos: 0, shura: 0,
         camus: 0, aphrodite: 0
       };
+      if (progressContainer) {
+        progressContainer.setAttribute('aria-valuenow', '0');
+      }
     }
 
     if (startBtn) {
@@ -437,6 +492,9 @@
       restartBtn.addEventListener('click', () => {
         resultsScreen?.classList.remove('active');
         startScreen?.classList.add('active');
+        setTimeout(() => {
+          startBtn?.focus();
+        }, 100);
       });
     }
 
@@ -447,13 +505,23 @@
         return;
       }
 
+      const progress = Math.round((currentQuestionIndex / quizQuestions.length) * 100);
       if (progressFill) {
-        const progress = (currentQuestionIndex / quizQuestions.length) * 100;
         progressFill.style.width = `${progress}%`;
+      }
+      if (progressContainer) {
+        progressContainer.setAttribute('aria-valuenow', String(progress));
       }
       
       if (counterText) counterText.textContent = `Pregunta ${currentQuestionIndex + 1} de ${quizQuestions.length}`;
-      if (questionText) questionText.textContent = q.question;
+      
+      if (questionText) {
+        questionText.textContent = q.question;
+        // Focus the question text so screen readers announce it immediately on change
+        setTimeout(() => {
+          questionText.focus();
+        }, 50);
+      }
 
       if (optionsContainer) {
         optionsContainer.innerHTML = '';
@@ -482,6 +550,7 @@
 
     function calculateAndShowResult() {
       if (progressFill) progressFill.style.width = "100%";
+      if (progressContainer) progressContainer.setAttribute('aria-valuenow', "100");
       
       let winnerId = 'mu';
       let highestScore = -1;
@@ -500,7 +569,7 @@
       if (resultTitle) resultTitle.textContent = `Guardián de la ${saint.temple}`;
       if (resultPortrait) {
         resultPortrait.src = saint.image;
-        resultPortrait.alt = saint.name;
+        resultPortrait.alt = `Retrato del Caballero de Oro ${saint.name}`;
       }
       if (resultDesc) resultDesc.textContent = `Tu cosmos está firmemente alineado con ${saint.name}. ${saint.description}`;
 
@@ -510,6 +579,11 @@
 
       questionScreen?.classList.remove('active');
       resultsScreen?.classList.add('active');
+
+      // Focus the results screen for accessibility announcements
+      setTimeout(() => {
+        resultsScreen?.focus();
+      }, 150);
     }
   });
 </script>
